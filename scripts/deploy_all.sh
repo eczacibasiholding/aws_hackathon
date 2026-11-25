@@ -118,6 +118,9 @@ if has lambdas; then
     aws lambda create-function-url-config --function-name nexus-api --auth-type NONE >/dev/null   # CORS Lambda içinde
     aws lambda add-permission --function-name nexus-api --statement-id fnurl-public \
       --action lambda:InvokeFunctionUrl --principal "*" --function-url-auth-type NONE >/dev/null
+    # 2025 sonrası herkese açık Function URL ayrıca lambda:InvokeFunction ister; yoksa 403
+    aws lambda add-permission --function-name nexus-api --statement-id fnurl-public-invoke \
+      --action lambda:InvokeFunction --principal "*" --invoked-via-function-url >/dev/null 2>&1 || true
   fi
   API_URL="$(aws lambda get-function-url-config --function-name nexus-api --query FunctionUrl --output text)"
   save API_URL "$API_URL"
