@@ -150,3 +150,6 @@ fi
 
 say "Bitti. Durum dosyası: .build/deploy_state.env (API_KEY burada; repoya eklemeyin)"
 cat "$STATE" | sed 's/^API_KEY=.*/API_KEY=<gizli>/'
+
+# Harita taban verisi (map/base.json) — frontend/tedarik-zinciri.html bunu GET /map ile okur
+NEXUS_BUCKET="${BUCKET:-${NEXUS_BUCKET:-}}" python3 "$(dirname "$0")/build_map_data.py" || echo "UYARI: harita verisi üretilemedi"

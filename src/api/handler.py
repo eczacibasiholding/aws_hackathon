@@ -142,12 +142,78 @@ def eposta_yukle(govde: dict) -> dict:
     return {"durum": "YUKLENDI", "key": key}
 
 
+# ---------- Harita (frontend/tedarik-zinciri.html AJAN SÖZLEŞMESİ) ----------
+def _gun_ms(tarih: str | None):
+    if not tarih:
+        return None
+    from datetime import datetime, timezone
+    return int(datetime.fromisoformat(tarih[:10]).replace(tzinfo=timezone.utc).timestamp() * 1000)
+
+
+def _rota_noktasi(rota: list, f: float):
+    import math
+    if len(rota) < 2:
+        return rota[0], None
+    seg = [math.dist(rota[i], rota[i + 1]) for i in range(len(rota) - 1)]
+    hedef, top = max(0.0, min(1.0, f)) * sum(seg), 0.0
+    for i, L in enumerate(seg):
+        if top + L >= hedef or i == len(seg) - 1:
+            t = 0 if L == 0 else (hedef - top) / L
+            a, b = rota[i], rota[i + 1]
+            pos = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]
+            yon = (math.degrees(math.atan2((b[0] - a[0]) * math.cos(math.radians((a[1] + b[1]) / 2)), b[1] - a[1])) + 360) % 360
+            return pos, round(yon)
+        top += L
+
+
+def harita(kurulus: str) -> dict:
+    """Taban veri (map/base.json, girdi Excel'inden) + NEXUS risk/karar durumu. Konum: ETD→güncel ETA arası plan bazlı tahmin."""
+    import time
+    taban = (_json("map/base.json") or {}).get(kurulus) or {"facilities": [], "shipments": []}
+    simdi = int(time.time() * 1000)
+    risk = {}
+    for oz in runs_listesi():
+        sv = oz.get("sevkiyat_no")
+        if sv and oz.get("durum") in ("ONAY_BEKLIYOR", "UYARI") and sv not in risk:
+            risk[sv] = oz
+    karar = {k.get("olay_no"): k.get("karar") for k in kararlar()}
+    sevk = []
+    for s in taban["shipments"]:
+        dm = (s.get("durum_metni") or "").lower()
+        if dm.startswith("teslim"):
+            continue
+        kalkis, eta = _gun_ms(s.get("departed_at")), _gun_ms(s.get("eta"))
+        if "yolda" in dm and kalkis and eta and eta > kalkis:
+            durum, f = "yolda", min(0.97, max(0.0, (simdi - kalkis) / (eta - kalkis)))
+        else:
+            durum, f = "bekliyor", 0.0
+        pos, yon = _rota_noktasi(s["route"], f)
+        neden = s.get("delay_reason") or None
+        r = risk.get(s["id"])
+        if r:
+            ek = f"NEXUS {r.get('risk_no') or ''} {r.get('risk_kademesi') or ''} ({r.get('risk_puani')})"
+            if r.get("olay_no"):
+                ek += f" · {r['olay_no']}: {karar.get(r['olay_no']) or 'Onay Bekliyor'}"
+            neden = f"{neden} · {ek}" if neden else ek
+        sevk.append({**{k: s[k] for k in ("id", "direction", "material", "quantity", "unit", "mode", "from", "to", "route")},
+                     "lon": pos[0], "lat": pos[1], "heading": yon if durum == "yolda" else None, "status": durum,
+                     "departed_at": s.get("departed_at"), "eta_planned": s.get("eta_planned"), "eta": s.get("eta"),
+                     "delay_reason": neden, "ts": simdi})
+    return {"generated_at": simdi, "facilities": taban["facilities"], "shipments": sevk}
+
+
 def lambda_handler(event, context):
     http = (event.get("requestContext") or {}).get("http") or {}
     yontem = http.get("method") or event.get("httpMethod") or "GET"
     yol = (http.get("path") or event.get("rawPath") or event.get("path") or "/").rstrip("/") or "/"
     if yontem == "OPTIONS":
         return _yanit(204, {})
+    if yontem == "GET" and yol == "/map":  # harita herkese açık okur (sentetik veri, anahtar gerekmez)
+        try:
+            q = event.get("queryStringParameters") or {}
+            return _yanit(200, harita(str(q.get("kurulus", "")).upper()))
+        except Exception as exc:
+            return _yanit(500, {"hata": str(exc)})
     basliklar = {k.lower(): v for k, v in (event.get("headers") or {}).items()}
     if not API_KEY or not hmac.compare_digest(basliklar.get("x-api-key", ""), API_KEY):
         return _yanit(401, {"hata": "yetkisiz"})

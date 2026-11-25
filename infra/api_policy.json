@@ -1,5 +1,5 @@
 {"Version":"2012-10-17","Statement":[
- {"Effect":"Allow","Action":["s3:GetObject"],"Resource":["arn:aws:s3:::__BUCKET__/runs/*","arn:aws:s3:::__BUCKET__/decisions/*","arn:aws:s3:::__BUCKET__/registry/*"]},
+ {"Effect":"Allow","Action":["s3:GetObject"],"Resource":["arn:aws:s3:::__BUCKET__/runs/*","arn:aws:s3:::__BUCKET__/decisions/*","arn:aws:s3:::__BUCKET__/registry/*","arn:aws:s3:::__BUCKET__/map/*"]},
  {"Effect":"Allow","Action":["s3:PutObject"],"Resource":["arn:aws:s3:::__BUCKET__/inbound-email/*"]},
  {"Effect":"Allow","Action":["s3:ListBucket"],"Resource":"arn:aws:s3:::__BUCKET__"},
  {"Effect":"Allow","Action":["bedrock-agentcore:InvokeAgentRuntime"],"Resource":["__RUNTIME_ARN__","__RUNTIME_ARN__/*"]},
