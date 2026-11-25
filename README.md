@@ -99,5 +99,5 @@ D0 = 25.11.2026
 
 - İlk kurulum (bir kez, tekrar çalıştırılabilir): `./scripts/setup_frontend_infra.sh`
 - Elle deploy: `./scripts/deploy_frontend.sh`
-- Otomatik deploy: `main` dalına `frontend/**` değişikliği push edilince `.github/workflows/deploy-frontend.yml` çalışır. AWS'ye GitHub OIDC ile bağlanır (saklanan erişim anahtarı yok). Rol `nexus-github-frontend-deploy` yalnızca bu reponun `main` dalına güvenir ve yalnızca bu bucket'a yazabilir.
+- Otomatik deploy: `main` dalına `frontend/**` değişikliği push edilince `.github/workflows/deploy-frontend.yml` çalışır. AWS'ye GitHub OIDC ile bağlanır (saklanan erişim anahtarı yok). Rol `nexus-github-frontend-deploy` yalnızca bu reponun `main` dalına güvenir ve yalnızca bu bucket'a yazabilir. GitHub bu repo için token'daki `sub` değerini ID'li gönderir (`repo:eczacibasiholding@282631194/aws_hackathon@1471609910:ref:refs/heads/main`); repo yeniden açılır ya da taşınırsa rolün güven koşulu bu değere göre güncellenmelidir.
 - Not: bucket herkese açık okunur ve HTTP'dir (demo için). HTTPS gerekirse önüne CloudFront konur.
