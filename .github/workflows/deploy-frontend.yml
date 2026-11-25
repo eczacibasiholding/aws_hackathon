@@ -23,6 +23,7 @@ jobs:
     env:
       AWS_REGION: us-east-1
       BUCKET: nexus-ui-draft-242872169400
+      SITE_URL: https://dhqlkgzaubwcj.cloudfront.net
     steps:
       - uses: actions/checkout@v7
 
