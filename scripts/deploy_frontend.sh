@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 # Deploys frontend/ to the S3 bucket behind CloudFront (mirror: files removed locally are removed from S3).
 # Usage: ./scripts/deploy_frontend.sh
-# Override defaults with env vars: BUCKET, REGION, SITE_URL (public HTTPS URL checked after the sync).
+# Override defaults with env vars: BUCKET, REGION, SITE_URL (public HTTPS URL checked after the sync),
+# SRC (folder to deploy, default <repo>/frontend).
 set -euo pipefail
 
 REGION="${REGION:-us-east-1}"
 ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
 BUCKET="${BUCKET:-nexus-ui-draft-${ACCOUNT_ID}}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SRC="${ROOT_DIR}/frontend"
+SRC="${SRC:-${ROOT_DIR}/frontend}"   # override to deploy a frontend/ checked out from another repo
 
 # Fail fast if the page would depend on an external CDN again (venue networks block unpkg.com).
 if grep -nE '<script[^>]+src="https?://|<link[^>]+href="https?://' "${SRC}"/*.html; then
