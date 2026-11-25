@@ -24,9 +24,9 @@ jobs:
       AWS_REGION: us-east-1
       BUCKET: nexus-ui-draft-242872169400
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::242872169400:role/nexus-github-frontend-deploy
           aws-region: us-east-1
