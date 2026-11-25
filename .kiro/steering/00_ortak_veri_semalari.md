@@ -184,15 +184,15 @@ class SignalOutput(Zarf):
     isleme_karari: Literal["ANALIZ", "AYIKLA"]
     ayiklama_nedeni: Optional[str] = None
     olay_tipi: Optional[str] = None                      # LLM
-    ulke_bolge: Optional[str] = None                      # LLM
-    ilgili_taraf: list[TarafNo] = []                      # LLM ipucu → tool doğrulama
-    ilgili_sevkiyat: list[SevkiyatNo] = []                # tool (eşleştirme)
-    ilgili_malzeme: list[MalzemeNo] = []                  # tool (eşleştirme)
-    tahmini_gecikme_gun: Optional[float] = None           # LLM; metinde yoksa None
-    alternatif_ipucu: Optional[str] = None                # LLM; değerlendirilmez
-    sinyal_guvenilirligi: Puan15                          # tool
-    tespit_gecikmesi_saat: Optional[float] = None         # tool
-    bagli_risk_no: Optional[RiskNo] = None                # zarf risk_no ile aynı olmalı
+    ulke_bolge: Optional[str] = None                     # LLM
+    ilgili_taraf: list[TarafNo] = []                     # LLM ipucu → tool doğrulama
+    ilgili_sevkiyat: list[SevkiyatNo] = []               # tool (eşleştirme)
+    ilgili_malzeme: list[MalzemeNo] = []                 # tool (eşleştirme)
+    tahmini_gecikme_gun: Optional[float] = None          # LLM; metinde yoksa None
+    alternatif_ipucu: Optional[str] = None               # LLM; değerlendirilmez
+    sinyal_guvenilirligi: Puan15                         # tool
+    tespit_gecikmesi_saat: Optional[float] = None        # tool
+    bagli_risk_no: Optional[RiskNo] = None               # zarf risk_no ile aynı olmalı
     kanit: SignalKanit
     kaynak: list[KaynakRef]
     dogrulama_uyarilari: list[Uyari] = []
@@ -208,14 +208,14 @@ class SignalOutput(Zarf):
 
 # ---------- 02 · Risk ----------
 class PerformansBileseni(Sozlesme):
-    puan: Optional[Puan15] = None                         # tool (Esik_Tablolari)
-    taraf: Optional[TarafNo] = None                       # TSxx → Tasiyicilar, TD5xxx → Tedarikciler
-    kaynak_sutun: Optional[str] = None                    # "Zamanında Varış Oranı" | "OTIF Oranı"
-    secim_gerekcesi: Optional[str] = None                 # LLM
+    puan: Optional[Puan15] = None                        # tool (Esik_Tablolari)
+    taraf: Optional[TarafNo] = None                      # TSxx → Tasiyicilar, TD5xxx → Tedarikciler
+    kaynak_sutun: Optional[str] = None                   # "Zamanında Varış Oranı" | "OTIF Oranı"
+    secim_gerekcesi: Optional[str] = None                # LLM
 
 
 class DisKosulBileseni(Sozlesme):                        # LLM SINIR MODELİ (G10 istisnası)
-    puan: Optional[Puan15] = None                         # kanıt yetersizse None
+    puan: Optional[Puan15] = None                        # kanıt yetersizse None
     gerekce: Optional[str] = None
     kanit_sinyaller: list[SinyalNo] = []
 
@@ -230,12 +230,12 @@ class RiskBilesenleri(Sozlesme):
 class RiskOutput(Zarf):
     agent: Literal["risk"] = "risk"
     bilesenler: RiskBilesenleri
-    olasilik: Optional[float] = Field(None, ge=1, le=5)   # tool; eksik bileşende None
-    etki: Optional[Puan15] = None                         # = ImpactOutput.etki_puani
+    olasilik: Optional[float] = Field(None, ge=1, le=5)  # tool; eksik bileşende None
+    etki: Optional[Puan15] = None                        # = ImpactOutput.etki_puani
     risk_puani: Optional[float] = Field(None, ge=1, le=25)
     risk_kademesi: Optional[Kademe] = None
-    agent_aksiyonu: Optional[str] = None                  # tam analiz + onaya sun | uyarı + seçenek hazırda | izle
-    aciklama: Optional[str] = None                        # LLM, kısa Türkçe
+    agent_aksiyonu: Optional[str] = None                 # tam analiz + onaya sun | uyarı + seçenek hazırda | izle
+    aciklama: Optional[str] = None                       # LLM, kısa Türkçe
     kaynak: list[KaynakRef]
 
     @model_validator(mode="after")
@@ -265,13 +265,13 @@ class ImpactOutput(Zarf):                                # malzeme başına bir 
     tesis_kodu: TesisKodu
     hat_kodu: HatKodu
     olcu_birimi: Optional[Literal["KG", "TON", "ADET"]] = None
-    serbest_stok: float = Field(ge=0)                     # yalnızca Serbest Stok
+    serbest_stok: float = Field(ge=0)                    # yalnızca Serbest Stok
     gunluk_tuketim: float = Field(gt=0)
     stok_kapsama_gun: float = Field(ge=0)
-    tukenme_tarihi: datetime                              # kesirli gün → saat dahil
+    tukenme_tarihi: datetime                             # kesirli gün → saat dahil
     planlanan_kullanilabilir_tarih: date
-    guncel_kullanilabilir_tarih: date                     # varış + gümrük + iç nakliye + kalite (+ WhatIfGun)
-    kullanilabilir_gun: float                             # gün indeksi (G5)
+    guncel_kullanilabilir_tarih: date                    # varış + gümrük + iç nakliye + kalite (+ WhatIfGun)
+    kullanilabilir_gun: float                            # gün indeksi (G5)
     acik_durus_gun: float = Field(ge=0)
     gunluk_durus_maliyeti_try: float = Field(ge=0)
     yeniden_baslatma_maliyeti_try: float = Field(ge=0)
@@ -294,8 +294,8 @@ class ImpactOutput(Zarf):                                # malzeme başına bir 
 # ---------- 04 · Options ----------
 class KisitKontrolu(Sozlesme):
     sonuc: KisitSonuc
-    kontroller: list[KisitKodu]                           # uygulanan kısıtlar
-    kalan_kisitlar: list[KisitKodu] = []                  # KALDI ise hangileri
+    kontroller: list[KisitKodu]                          # uygulanan kısıtlar
+    kalan_kisitlar: list[KisitKodu] = []                 # KALDI ise hangileri
 
 
 class StratejiBileseni(Sozlesme):
@@ -306,9 +306,9 @@ class StratejiBileseni(Sozlesme):
     miktar: float = Field(gt=0)
     olcu_birimi: Optional[Literal["KG", "TON", "ADET"]] = None
     brut_kg: Optional[float] = Field(None, ge=0)
-    hazir_gun: float = Field(ge=0)                        # gün indeksi (G5)
+    hazir_gun: float = Field(ge=0)                       # gün indeksi (G5)
     lojistik_maliyet_try: float = Field(0, ge=0)
-    ek_malzeme_maliyeti_try: float = 0                    # fiyat farkı; negatif olabilir
+    ek_malzeme_maliyeti_try: float = 0                   # fiyat farkı; negatif olabilir
     test_maliyeti_try: float = Field(0, ge=0)
     co2_kg: float = Field(0, ge=0)
     uygulama_riski: Optional[Puan15] = None
@@ -318,7 +318,7 @@ class StratejiBileseni(Sozlesme):
 class Strateji(Sozlesme):
     strateji_kodu: StratejiKodu
     strateji_adi: str
-    bilesenler: list[StratejiBileseni] = []               # "Bekle" → []
+    bilesenler: list[StratejiBileseni] = []              # "Bekle" → []
     uygun_mu: bool
     eleme_nedeni: Optional[str] = None
 
@@ -330,9 +330,9 @@ class Strateji(Sozlesme):
 
 
 class ElenenKaynak(Sozlesme):
-    kaynak: str                                           # Kaynak Anahtarı / Stok Anahtarı / Rota Kodu
+    kaynak: str                                          # Kaynak Anahtarı / Stok Anahtarı / Rota Kodu
     neden: str
-    hazir_gun: Optional[float] = None                     # ör. kalifikasyon nedeniyle 56. gün
+    hazir_gun: Optional[float] = None                    # ör. kalifikasyon nedeniyle 56. gün
 
 
 class OptionsOutput(Zarf):
@@ -351,9 +351,9 @@ class OptionsOutput(Zarf):
 # ---------- 05 · Decision ----------
 class SimulasyonGunu(Sozlesme):
     gun: int = Field(ge=0, le=60)
-    giris: float = Field(ge=0)                            # gün başı giriş
+    giris: float = Field(ge=0)                           # gün başı giriş
     gun_sonu_stok: float = Field(ge=0)
-    durus_orani: float = Field(ge=0, le=1)                # kısmi duruş kesirli
+    durus_orani: float = Field(ge=0, le=1)               # kısmi duruş kesirli
 
 
 class StratejiSimulasyonu(Sozlesme):
@@ -370,7 +370,7 @@ class MaliyetKalemleri(Sozlesme):
     stok_tasima: float = Field(ge=0)
 
 
-class NormalizePuanlar(Sozlesme):                        # senaryo içi 0–1; bölen 0 ise None
+class NormalizePuanlar(Sozlesme):                       # senaryo içi 0–1; bölen 0 ise None
     maliyet: Optional[float] = Field(None, ge=0, le=1)
     durus: Optional[float] = Field(None, ge=0, le=1)
     co2: Optional[float] = Field(None, ge=0, le=1)
@@ -388,7 +388,7 @@ class StratejiKarsilastirma(Sozlesme):
     risk: Optional[float] = None
     normalize: NormalizePuanlar
     agirlikli_skor: Optional[float] = None
-    sira: Optional[int] = Field(None, ge=1)               # uygun değilse None
+    sira: Optional[int] = Field(None, ge=1)              # uygun değilse None
     oneri: Optional[Literal["ÖNERİLEN"]] = None
 
     @model_validator(mode="after")
@@ -399,11 +399,11 @@ class StratejiKarsilastirma(Sozlesme):
         return self
 
 
-class MilpSonucu(Sozlesme):                               # yalnızca S1
+class MilpSonucu(Sozlesme):                              # yalnızca S1
     durum: Literal["OPTIMAL", "COZUMSUZ", "ZAMAN_ASIMI"]
-    x_T: Optional[float] = Field(None, ge=0)              # transfer (kg)
-    x_A: Optional[float] = Field(None, ge=0)              # hava (kg)
-    y_C: Optional[Literal[0, 1]] = None                   # COD (liman değişikliği)
+    x_T: Optional[float] = Field(None, ge=0)             # transfer (kg)
+    x_A: Optional[float] = Field(None, ge=0)             # hava (kg)
+    y_C: Optional[Literal[0, 1]] = None                  # COD (liman değişikliği)
     amac_try: Optional[float] = None
     cckv_ile_uyumlu: Optional[bool] = None
 
@@ -415,30 +415,30 @@ class OneriRakamlari(Sozlesme):
     tasarruf_try: float
 
 
-class DecisionMetinLLM(Sozlesme):                         # LLM SINIR MODELİ
-    gerekce: str                                          # kısa, rakamlı, Türkçe; rakamlar yalnızca OneriRakamlari'ndan
-    dikkat_notu: Optional[str] = None                     # MILP–ÇKKV çelişkisi vb.
+class DecisionMetinLLM(Sozlesme):                        # LLM SINIR MODELİ
+    gerekce: str                                         # kısa, rakamlı, Türkçe; rakamlar yalnızca OneriRakamlari'ndan
+    dikkat_notu: Optional[str] = None                    # MILP–ÇKKV çelişkisi vb.
 
 
 class OneriKarti(Sozlesme):
-    baslik: str                                           # ekran metni (iş birimi onaylı)
-    gerekce: Optional[str] = None                         # DecisionMetinLLM.gerekce; LLM hatasında None
+    baslik: str                                          # ekran metni (iş birimi onaylı)
+    gerekce: Optional[str] = None                        # DecisionMetinLLM.gerekce; LLM hatasında None
     dikkat_notu: Optional[str] = None
-    onerilen_strateji_kodu: Optional[StratejiKodu] = None    # uygun strateji yoksa None
+    onerilen_strateji_kodu: Optional[StratejiKodu] = None   # uygun strateji yoksa None
     rakamlar: OneriRakamlari
     butonlar: list[Literal["Onayla", "Reddet", "Değiştir"]] = ["Onayla", "Reddet", "Değiştir"]
 
 
 class KararKaydiTaslagi(Sozlesme):
     olay_no: KararNo
-    karar: Literal["Onay Bekliyor"] = "Onay Bekliyor"     # DC-K1
+    karar: Literal["Onay Bekliyor"] = "Onay Bekliyor"    # DC-K1
     tasarruf_try: Optional[float] = None
     oneri_zamani: datetime
 
 
 class WhatIfKarsilastirma(Sozlesme):
     onceki_strateji_kodu: StratejiKodu
-    onceki_stratejinin_yeni_durus_gun: float = Field(ge=0)    # S1 +7: ≈ 3,7
+    onceki_stratejinin_yeni_durus_gun: float = Field(ge=0)   # S1 +7: ≈ 3,7
     yeni_strateji_kodu: Optional[StratejiKodu] = None
     oneri_degisti_mi: bool
 
@@ -459,7 +459,7 @@ class DecisionOutput(Zarf):
             raise ValueError("birden çok ÖNERİLEN")
         if onerilen:
             o = onerilen[0]
-            if not o.uygun_mu or o.sira != 1:                                     # DC-K4
+            if not o.uygun_mu or o.sira != 1:                                    # DC-K4
                 raise ValueError("ÖNERİLEN, kısıtı geçen 1. sıra olmalı")
             if self.oneri_karti.onerilen_strateji_kodu != o.strateji_kodu:
                 raise ValueError("kart stratejisi ≠ ÖNERİLEN")
@@ -468,18 +468,18 @@ class DecisionOutput(Zarf):
 
 # ---------- 00 · Orkestratör girdileri ve karar kaydı ----------
 class WhatIfIstegi(Sozlesme):
-    senaryo: Senaryo                                      # Parametreler → WhatIfSenaryo
-    what_if_gun: float                                    # Parametreler → WhatIfGun (demo: 7)
+    senaryo: Senaryo                                     # Parametreler → WhatIfSenaryo
+    what_if_gun: float                                   # Parametreler → WhatIfGun (demo: 7)
     tetik: Literal["PARAMETRE", "YENI_SINYAL"]
-    sinyal_no: Optional[SinyalNo] = None                  # YENI_SINYAL ise
+    sinyal_no: Optional[SinyalNo] = None                 # YENI_SINYAL ise
 
 
 class InsanKarari(Sozlesme):
     olay_no: KararNo
     karar: Literal["Onaylandı", "Reddedildi", "Revize Edildi"]
-    onaylayan_rol: str                                    # rol; kişi adı DEĞİL (G11)
+    onaylayan_rol: str                                   # rol; kişi adı DEĞİL (G11)
     karar_zamani: datetime
-    revize_notu: Optional[str] = None                     # "Değiştir" seçildiyse
+    revize_notu: Optional[str] = None                    # "Değiştir" seçildiyse
 
 
 class KararKaydi(Sozlesme):
@@ -518,13 +518,13 @@ LLM, Bedrock üzerinden çağrıldığında **yalnızca aşağıdaki modelleri**
 class SignalLLMCikarimi(Sozlesme):                       # LLM SINIR MODELİ
     olay_tipi: Optional[str] = None
     ulke_bolge: Optional[str] = None
-    taraf_adlari: list[str] = []                          # serbest metin adlar → tool: Tedarikciler / Tasiyicilar
-    takip_no_ipuclari: list[str] = []                     # → tool: Sevkiyatlar.Takip No (Sahte)
-    po_ipuclari: list[str] = []                           # → tool: Acik_Siparisler.PO No (str)
-    gemi_adlari: list[str] = []                           # → tool: Sevkiyatlar.Son Konum / Not
-    tahmini_gecikme_gun: Optional[float] = None           # metinde açık değilse None
+    taraf_adlari: list[str] = []                         # serbest metin adlar → tool: Tedarikciler / Tasiyicilar
+    takip_no_ipuclari: list[str] = []                    # → tool: Sevkiyatlar.Takip No (Sahte)
+    po_ipuclari: list[str] = []                          # → tool: Acik_Siparisler.PO No (str)
+    gemi_adlari: list[str] = []                          # → tool: Sevkiyatlar.Son Konum / Not
+    tahmini_gecikme_gun: Optional[float] = None          # metinde açık değilse None
     alternatif_ipucu: Optional[str] = None
-    alintilar: dict[str, str] = {}                        # alan adı → Ham Metin'den birebir alıntı
+    alintilar: dict[str, str] = {}                       # alan adı → Ham Metin'den birebir alıntı
 ```
 
 Risk, Impact, Options ve Decision'daki diğer LLM katkıları (taraf seçimi, kayıt seçimi, strateji ailesi planı, tutarlılık değerlendirmesi) **metin/gerekçe** alanlarına yazılır ya da tool çağrı planı olarak kalır. Hiçbiri sayısal alan doldurmaz.
