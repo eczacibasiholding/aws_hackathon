@@ -5,6 +5,7 @@ pandas==3.0.5
 openpyxl==3.1.5
 pydantic==2.13.5
 pulp==4.3.1
-scipy==1.16.3
+scipy==1.18.1
 boto3==1.44.11
-pyyaml==6.0.2
+pyyaml==6.0.3
+aws-opentelemetry-distro==0.24.0

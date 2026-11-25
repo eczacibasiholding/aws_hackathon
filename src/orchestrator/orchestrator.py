@@ -93,6 +93,12 @@ def sinyal_isle(payload: dict) -> dict:
 
     def bitir(durum: str, **ek):
         ozet.update(durum=durum, bitis=_now().isoformat(), **ek)
+        # UI/API düz alanları (ui/app.js, src/api/handler.py)
+        sg, rk = ozet.get("signal") or {}, ozet.get("risk") or {}
+        ozet.update(baslangic_zamani=ozet["baslangic"], bitis_zamani=ozet["bitis"],
+                    sevkiyat_no=(sg.get("sevkiyat") or [None])[0], malzeme_no=(sg.get("malzeme") or [None])[0],
+                    risk_puani=rk.get("puan"), risk_kademesi=rk.get("kademe"), olasilik=rk.get("olasilik"),
+                    etki=rk.get("etki"), karar="Onay Bekliyor" if durum == "ONAY_BEKLIYOR" else None)
         ozet["durumlar"].append(durum)
         st.put(f"runs/{run_id}/summary.json", ozet)
         return ozet

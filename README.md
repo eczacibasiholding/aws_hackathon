@@ -6,7 +6,7 @@ Taşıyıcı e-postasından insan onayına kadar otonom çalışan çok agent'l�
 |---|---|
 | AWS hesap ID | **242872169400** |
 | Bölge | **us-east-1** (SES, AgentCore Runtime ve model aynı bölgede) |
-| Model | `BEDROCK_MODEL_ID` ortam değişkeni (F0'da `scripts/list_models.sh` ile seçilir; seçilen değer buraya yazılır) |
+| Model | `us.anthropic.claude-opus-5` (yalnızca `BEDROCK_MODEL_ID` ortam değişkeninden okunur) |
 | Analiz tarihi (D0) | 25.11.2026 |
 | Çerçeve | `.kiro/steering/SCOPE.md`, spec: `.kiro/specs/nexus-mvp/` |
 
