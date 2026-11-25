@@ -5,3 +5,6 @@ __pycache__/
 venv/
 .DS_Store
 nexus_pipeline.log
+.build/
+.bedrock_agentcore.yaml
+.env

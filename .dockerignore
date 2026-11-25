@@ -1,0 +1,11 @@
+tests/fixtures/
+data/
+frontend/
+ui/
+docs/
+.build/
+.git/
+.venv/
+__pycache__/
+*.pyc
+.kiro/

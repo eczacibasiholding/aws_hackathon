@@ -8,22 +8,63 @@ EPS = 1e-4  # eşit maliyetli alternatif optimumlarda tüm transfer edilebilir s
 
 def solve_milp(p: dict) -> Optional[dict]:
     """p: S0, d, t_b, t_c (None → COD yok), B, pen, R, T_max, A_max, MOQ, c_A, F_A, F_T, F_C, a_T, a_A, M."""
-    try:
-        return _pulp(p)
-    except ImportError:
-        pass
-    try:
-        return _scipy(p)
-    except ImportError:
-        return None
+    for solver in (_pulp, _scipy, _enumerate):
+        try:
+            sol = solver(p)
+        except Exception:  # kütüphane/çözücü yok → bir sonraki yedek
+            continue
+        if sol is not None:
+            return sol
+    return None
+
+
+def _enumerate(p):
+    """Saf Python yedeği: 4 ikili değişkenin 16 bileşimi × kapalı form LP (model küçük ve yapısı sabit)."""
+    import itertools
+    best = None
+    t_c = p["t_c"] if p["t_c"] is not None else p["t_b"]
+    for zT, zA, yC, w in itertools.product((0, 1), repeat=4):
+        if yC and p["t_c"] is None:
+            continue
+        if p["a_T"] * zT > p["S0"] / p["d"] + 1e-9 or p["a_A"] * zA > p["S0"] / p["d"] + 1e-9:
+            continue
+        xT = p["T_max"] * zT
+        gerek = (p["t_b"] - (p["t_b"] - t_c) * yC + p["B"]) * p["d"] - p["S0"] - xT   # kg cinsinden kalan açık
+        xA, u = 0.0, 0.0
+        if zA:
+            hedef = max(0.0, gerek) if p["c_A"] <= p["pen"] / p["d"] or not w else 0.0
+            xA = min(p["A_max"], max(p["MOQ"], hedef))
+            if p["MOQ"] > p["A_max"]:
+                continue
+        kalan = gerek - xA
+        if kalan > 1e-9:
+            if not w:
+                continue
+            u = kalan / p["d"]
+            if u > p["M"]:
+                continue
+        amac = p["F_T"] * zT + p["c_A"] * xA + p["F_A"] * zA + p["F_C"] * yC + p["pen"] * u + p["R"] * w
+        if best is None or amac - EPS * xT < best["_k"] - 1e-9:
+            best = {"durum": "OPTIMAL", "x_T": xT, "x_A": xA, "y_C": yC, "amac_try": amac, "cozucu": "enumerasyon",
+                    "_k": amac - EPS * xT}
+    if best:
+        best.pop("_k")
+        return best
+    return {"durum": "COZUMSUZ"}
 
 
 def _pulp(p):
     import pulp
     m = pulp.LpProblem("nexus_s1", pulp.LpMinimize)
-    xT = pulp.LpVariable("x_T", 0, p["T_max"]); zT = pulp.LpVariable("z_T", cat="Binary")
-    xA = pulp.LpVariable("x_A", 0, p["A_max"]); zA = pulp.LpVariable("z_A", cat="Binary")
-    yC = pulp.LpVariable("y_C", cat="Binary"); u = pulp.LpVariable("u", 0); w = pulp.LpVariable("w", cat="Binary")
+
+    def var(name, lo=None, hi=None, cat="Continuous"):
+        if hasattr(m, "add_variable"):  # PuLP ≥ 4
+            return m.add_variable(name, lowBound=lo, upBound=hi, cat=cat)
+        return pulp.LpVariable(name, lowBound=lo, upBound=hi, cat=cat)
+
+    xT = var("x_T", 0, p["T_max"]); zT = var("z_T", cat="Binary")
+    xA = var("x_A", 0, p["A_max"]); zA = var("z_A", cat="Binary")
+    yC = var("y_C", cat="Binary"); u = var("u", 0); w = var("w", cat="Binary")
     obj = p["F_T"] * zT + p["c_A"] * xA + p["F_A"] * zA + p["F_C"] * yC + p["pen"] * u + p["R"] * w
     m += obj - EPS * xT
     t_c = p["t_c"] if p["t_c"] is not None else p["t_b"]
@@ -36,7 +77,9 @@ def _pulp(p):
     m += u <= p["M"] * w
     m += p["a_T"] * zT <= p["S0"] / p["d"]
     m += p["a_A"] * zA <= p["S0"] / p["d"]
-    st = m.solve(pulp.PULP_CBC_CMD(msg=False, timeLimit=30))
+    if not pulp.listSolvers(onlyAvailable=True):
+        return None
+    st = m.solve()
     durum = pulp.LpStatus[st]
     if durum != "Optimal":
         return {"durum": "COZUMSUZ" if durum == "Infeasible" else "ZAMAN_ASIMI"}

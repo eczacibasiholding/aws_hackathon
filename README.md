@@ -1,91 +1,97 @@
-# NEXUS Supply Chain Risk Intervention System
+# NEXUS · Tedarik zinciri risk müdahale sistemi
 
-Automated pipeline for supply chain disruption detection, risk assessment, mitigation option generation, and decision support with human approval workflow.
+Taşıyıcı e-postasından insan onayına kadar otonom çalışan çok agent'lı sistem: **Signal → Risk ∥ Impact → Options → Decision**, deterministik bir orkestratörle, Amazon Bedrock AgentCore Runtime üzerinde. Karar insandadır: sistem sipariş vermez, ERP'ye yazmaz.
 
-## Project Structure
+| | |
+|---|---|
+| AWS hesap ID | **242872169400** |
+| Bölge | **us-east-1** (SES, AgentCore Runtime ve model aynı bölgede) |
+| Model | `BEDROCK_MODEL_ID` ortam değişkeni (F0'da `scripts/list_models.sh` ile seçilir; seçilen değer buraya yazılır) |
+| Analiz tarihi (D0) | 25.11.2026 |
+| Çerçeve | `.kiro/steering/SCOPE.md`, spec: `.kiro/specs/nexus-mvp/` |
+
+## Mimari
 
 ```
-nexus-hackathon/
-├── src/nexus/              # Main package
-│   ├── __init__.py
-│   ├── agents/             # Agent modules
-│   │   ├── __init__.py
-│   │   ├── signal_agent.py      # Signal extraction (Agent 1)
-│   │   ├── risk_agent.py        # Risk assessment (Agent 2)
-│   │   ├── options_agent.py     # Option generation (Agent 3)
-│   │   ├── decision_agent.py    # Decision support (Agent 4)
-│   │   └── orchestrator.py      # Pipeline controller
-│   ├── models.py           # Pydantic data models
-│   ├── data_loader.py      # Excel parsing
-│   ├── llm_client.py       # LLM integration (Bedrock/mock)
-│   └── app.py              # Streamlit UI
-├── data/                   # Input data
-│   ├── NEXUS_Agent_Veri_Seti_TEKNIK.xlsx
-│   └── NEXUS_Hackathon_Veri_Seti_AnaVeri.xlsx
-├── decisions/              # JSON audit records
-├── tests/                  # Test suite
-│   ├── test_signal_agent.py
-│   ├── test_risk_agent.py
-│   ├── test_options_agent.py
-│   ├── test_decision_agent.py
-│   └── test_integration.py
-├── pyproject.toml          # Project configuration
-└── requirements.txt        # Dependencies list
+Taşıyıcı e-postası ─► Amazon SES ─┐
+UI "E-posta gönder (yedek)" / CLI ─┴► S3 inbound-email/ (1 gün yaşam döngüsü)
+                                          │ ObjectCreated
+                                          ▼
+                     Lambda nexus-email-trigger  (MIME, kişisel veri temizliği, sinyal eşleştirme, idempotency)
+                                          │ InvokeAgentRuntime {eylem: SINYAL_ISLE}
+                                          ▼
+     Bedrock AgentCore Runtime  (src/app.py — tek paket)          ──► AgentCore Observability
+       Orkestratör (deterministik) → Signal → Risk ∥ Impact → Risk kademe → Options → Decision
+       Her agent: Strands + Bedrock LLM; sayıları yalnızca tool'lar üretir
+                                          │
+                     S3 runs/<run_id>/*.json · registry/ · decisions/<Olay No>.json
+                                          ▲
+     UI (S3 statik web, 4 ekran) ◄──► Lambda nexus-api (Function URL, x-api-key) ──► INSAN_KARARI
 ```
 
-## Dependencies
+Destek servisleri: S3, SES, Lambda, IAM, CloudWatch. LLM yalnızca Amazon Bedrock; agent SDK'sı Strands Agents.
 
-- **pandas**: Data processing
-- **openpyxl**: Excel file handling
-- **pydantic**: Data validation and models
-- **streamlit**: Web UI
-- **boto3**: AWS Bedrock LLM integration
-- **pytest**: Testing framework
-- **hypothesis**: Property-based testing
+| Yol | İçerik |
+|---|---|
+| `src/app.py` | AgentCore giriş noktası; `eylem`: `SINYAL_ISLE`, `TOPLU_TARAMA`, `INSAN_KARARI` |
+| `src/orchestrator/` | Durum makinesi, risk kayıt defteri, S3'e yazma |
+| `src/agents/{signal,risk,impact,options,decision}/` | Agent'lar ve tool'ları |
+| `src/contracts/schemas.py` | Agent'lar arası Pydantic sözleşmeleri (v1.1) |
+| `src/data_access/` | Girdi Excel'i (yerel yol veya `s3://`) |
+| `src/triggers/email_trigger/handler.py` | E-posta tetik Lambda'sı |
+| `src/api/handler.py` | UI API Lambda'sı: `GET /runs`, `GET /runs/{id}`, `GET /decisions`, `POST /decision`, `POST /email` |
+| `ui/` | 4 ekranlı statik UI (Uyarı, Etki, Seçenekler, Öneri ve onay); `API_URL` boşsa `ui/fixtures/` ile DEMO modu |
+| `scripts/` | `deploy_all.sh`, `list_models.sh`, `send_test_email.sh`, `demo_reset.py` |
+| `infra/` | IAM politika şablonları |
+| `config/` | `.env.example`, `email_kaynaklari.yaml` (gizli bilgi yok) |
 
-## Installation
+S3 kovası `nexus-242872169400-us-east-1`: `input/` (girdi Excel'i, salt okunur) · `inbound-email/` · `signals/` · `runs/` · `registry/` · `decisions/`. Cevap anahtarı yalnızca `tests/fixtures/` altındadır, S3'e ve Runtime paketine girmez (`.dockerignore`).
+
+## Kurulum (yerel)
 
 ```bash
-pip install -r requirements.txt
+python3.12 -m venv .venv && source .venv/bin/activate
+pip install -r requirements-dev.txt
+cp config/.env.example .env      # NEXUS_INPUT_URI=data/nexus_agent_input.xlsx ile yerelde çalışır
+pytest -m "not llm" -q
 ```
 
-Or using pyproject.toml:
+UI'ı backend'siz görmek: `cd ui && python3 -m http.server 8080` → http://localhost:8080 (DEMO modu).
+
+## Deploy (Kiro terminalinden, AWS SSO açıkken)
 
 ```bash
-pip install -e .
+aws sts get-caller-identity                      # 242872169400 görünmeli
+export AWS_REGION=us-east-1
+./scripts/list_models.sh                         # en güçlü reasoning modelini/inference profile'ını seç
+export BEDROCK_MODEL_ID=<seçilen-id>             # ör. us.anthropic.claude-...
+BEDROCK_MODEL_ID=$BEDROCK_MODEL_ID ./scripts/list_models.sh   # deneme çağrısı "OK" dönmeli
+./scripts/deploy_all.sh                          # kova + input + AgentCore + Lambda'lar + UI
 ```
 
-## Development
+`deploy_all.sh` idempotenttir; adımlar ayrı çalıştırılabilir: `STEPS="lambdas ui" ./scripts/deploy_all.sh`. Çıktılar (`AGENT_RUNTIME_ARN`, `API_URL`, `API_KEY`) `.build/deploy_state.env` dosyasına yazılır (repoya eklenmez).
 
-Run tests:
+Doğrulama:
+
 ```bash
-pytest
+source .build/deploy_state.env
+agentcore invoke '{"eylem":"SINYAL_ISLE","sinyal_no":"SG-2611-001"}'
+aws s3 ls s3://nexus-242872169400-us-east-1/runs/ --recursive | tail
+./scripts/send_test_email.sh SG-2611-001         # otonom tetik (S3 yedek yolu)
+aws logs tail /aws/lambda/nexus-email-trigger --since 10m
+curl -s -H "x-api-key: $API_KEY" "$API_URL/runs" | head -c 600
 ```
 
-Run Streamlit app:
-```bash
-streamlit run src/nexus/app.py
-```
+Demo hazırlığı (D17): `python scripts/demo_reset.py --evet` — S3 durumunu temizler ve canlı demo sinyalleri (`SG-2611-001,SG-2611-002`) hariç toplu tarama çalıştırır.
 
-## Architecture
-
-The system follows a multi-agent pipeline:
-
-1. **Signal Agent**: Extracts structured information from raw signal text
-2. **Risk Agent**: Calculates probability, impact, and risk scores
-3. **Options Agent**: Generates mitigation options with constraints
-4. **Decision Agent**: Evaluates and ranks options using ÇKKV scoring
-5. **Orchestrator**: Coordinates the pipeline and manages state
-
-## Analysis Reference Date
-
-D0 = 25.11.2026
+SES (opsiyonel): doğrulanmış alan adı ve MX kaydı varsa alma kuralı `signals@<alan-adı>` → S3 `inbound-email/` eylemiyle kurulur. Yoksa UI'daki "E-posta gönder (yedek)" veya `send_test_email.sh` aynı akışı tetikler.
 
 ## Frontend (tedarik zinciri haritası)
 
 `frontend/` statik bir sayfa: `tedarik-zinciri.html` (MapLibre GL + deck.gl). Backend bağlı değilken DEMO verisiyle çalışır.
 
 - Kütüphaneler ve harita verisi `frontend/vendor/` altında yerel olarak durur (maplibre-gl 5.24.0, deck.gl 9.3.5, topojson-client 3.1.0, world-atlas 2.0.2 `land-50m.json`). Etkinlik ağı unpkg.com'u engellediğinde sayfa boş kalıyordu; bu yüzden CDN kullanılmaz. `scripts/deploy_frontend.sh` HTML'de dış adresten script/stil bulursa deploy'u durdurur.
+- 4 ekranlı karar UI'ı (`ui/`) üst menüden bu haritaya bağlanır.
 - Yerelde açmak: `cd frontend && python3 -m http.server 8000` → http://localhost:8000/tedarik-zinciri.html
 
 ### Barındırma (AWS)

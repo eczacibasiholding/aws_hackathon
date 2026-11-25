@@ -27,11 +27,11 @@ def llm_acik() -> bool:
 def _model():
     from strands.models import BedrockModel
 
-    return BedrockModel(
-        model_id=os.environ["BEDROCK_MODEL_ID"],
-        region_name=os.environ.get("AWS_REGION", "us-east-1"),
-        temperature=float(os.environ.get("NEXUS_LLM_TEMPERATURE", "0.1")),
-    )
+    kw = {}
+    if os.environ.get("NEXUS_LLM_TEMPERATURE"):  # yeni Claude modelleri temperature kabul etmiyor
+        kw["temperature"] = float(os.environ["NEXUS_LLM_TEMPERATURE"])
+    return BedrockModel(model_id=os.environ["BEDROCK_MODEL_ID"],
+                        region_name=os.environ.get("AWS_REGION", "us-east-1"), **kw)
 
 
 def structured(prompt: str, output_model: type[T], system: str, tools: list | None = None) -> T | None:
