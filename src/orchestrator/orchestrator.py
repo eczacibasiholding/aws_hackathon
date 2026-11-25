@@ -251,6 +251,7 @@ def toplu_tarama(payload: dict) -> dict:
     from src.agents.signal import agent as signal
 
     data, _ = _data()
-    haric = set(filter(None, (payload.get("haric") or os.environ.get("DEMO_CANLI_SINYALLER", "")).split(",")))
+    h = payload.get("haric") or os.environ.get("DEMO_CANLI_SINYALLER", "")
+    haric = set(filter(None, h.split(",") if isinstance(h, str) else h))
     secili = payload.get("sinyaller") or [s for s in signal.list_signals(data) if s not in haric]
     return {"durum": "TAMAM", "sonuclar": [sinyal_isle({"sinyal_no": s, "kaynak": "TOPLU"}) for s in secili]}
