@@ -8,3 +8,7 @@ nexus_pipeline.log
 .build/
 .bedrock_agentcore.yaml
 .env
+.bedrock_agentcore/
+.bedrock_agentcore.yaml
+.build/
+.state/
