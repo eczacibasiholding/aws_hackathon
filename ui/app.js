@@ -77,7 +77,8 @@
 
   // ---------- Ekran 2 ----------
   function ekran2() {
-    const i = durum.detay && durum.detay.impact;
+    let i = durum.detay && durum.detay.impact;
+    if (Array.isArray(i)) i = i.slice().sort((a, b) => (b.aksiyonsuz_maliyet_try || 0) - (a.aksiyonsuz_maliyet_try || 0))[0];  // malzeme başına liste → en yüksek etkili
     if (!i) { $("#etkiKutular").innerHTML = '<p class="soluk">Bu run için etki çıktısı yok.</p>'; $("#zaman").innerHTML = ""; $("#siparisTablo tbody").innerHTML = ""; $("#etkiDetay").innerHTML = ""; return; }
     $("#etkiBaslik").textContent = `${i.sevkiyat_no} · ${i.malzeme_no} · ${i.tesis_kodu} / ${i.hat_kodu}`;
     $("#etkiKutular").innerHTML = [
@@ -186,7 +187,7 @@
   async function yenile() {
     try {
       const [runs, kararlar] = await Promise.all([runlariGetir(), kararlariGetir()]);
-      const yeni = runs.length && (!durum.runs.length || runs[0].run_id !== durum.runs[0].run_id);
+      const yeni = runs.length && durum.runs.length && runs[0].run_id !== durum.runs[0].run_id;
       durum.runs = runs; durum.kararlar = kararlar;
       if (!durum.seciliRun || yeni) {
         const oncelik = runs.find((r) => r.risk_kademesi === "Yüksek") || runs[0];
