@@ -1,0 +1,49 @@
+{
+  "agent": {
+    "name": "NEXUS Risk Agent",
+    "version": "1.0.0",
+    "type": "Supply Chain Risk Analysis",
+    "description": "Automated risk detection, scoring, and mitigation strategy generation",
+    "domain": "Supply Chain Management"
+  },
+  "data": {
+    "input": "data/NEXUS_Agent_Veri_Seti_TEKNIK.xlsx",
+    "reference": "data/NEXUS_Hackathon_Veri_Seti_AnaVeri.xlsx",
+    "analysis_date": "2026-11-25",
+    "planning_horizon_days": 30
+  },
+  "computing": {
+    "deterministic": true,
+    "llm_text_only": true,
+    "seed": null
+  },
+  "risk_scoring": {
+    "probability_weights": {
+      "signal_reliability": 0.4,
+      "party_performance": 0.3,
+      "external_condition": 0.2,
+      "financial_health": 0.1
+    },
+    "impact_thresholds": {
+      "high_cost": 2000000,
+      "medium_cost": 500000
+    },
+    "risk_thresholds": {
+      "low_max": 7,
+      "medium_max": 15
+    }
+  },
+  "performance_targets": {
+    "detection_time_hours": 4,
+    "decision_time_minutes": 30,
+    "false_alarm_rate_percent": 15,
+    "recommendation_acceptance_percent": 75,
+    "preventive_action_percent": 80
+  },
+  "output": {
+    "format": "markdown",
+    "include_justification": true,
+    "include_options": true,
+    "llm_usage": "text_generation_only"
+  }
+}

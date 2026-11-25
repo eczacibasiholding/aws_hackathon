@@ -1,0 +1,93 @@
+{
+  "agent": {
+    "name": "NEXUS Supply Chain Risk Agent",
+    "version": "1.0.0",
+    "type": "supply_chain_risk",
+    "description": "Automated supply chain disruption risk analysis with mitigation strategies"
+  },
+  "computing": {
+    "deterministic": true,
+    "llm_text_generation": true,
+    "seed": null
+  },
+  "data": {
+    "input_file": "data/NEXUS_Agent_Veri_Seti_TEKNIK.xlsx",
+    "reference_file": "data/NEXUS_Hackathon_Veri_Seti_AnaVeri.xlsx",
+    "analysis_date": "2026-11-25",
+    "date_format": "YYYY-MM-DD"
+  },
+  "risk_model": {
+    "scoring_type": "weighted_sum",
+    "probability_weights": {
+      "signal_reliability": 0.4,
+      "party_performance": 0.3,
+      "external_condition": 0.2,
+      "financial_health": 0.1
+    },
+    "impact_scale": {
+      "min": 1,
+      "max": 5
+    },
+    "risk_scale": {
+      "min": 1,
+      "max": 25
+    },
+    "risk_levels": {
+      "low": {
+        "min": 0,
+        "max": 7,
+        "action": "monitor"
+      },
+      "medium": {
+        "min": 7,
+        "max": 15,
+        "action": "alert_prepare"
+      },
+      "high": {
+        "min": 15,
+        "max": 25,
+        "action": "full_analysis"
+      }
+    }
+  },
+  "impact_factors": {
+    "financial": {
+      "high_threshold": 2000000,
+      "medium_threshold": 500000,
+      "unit": "TRY"
+    },
+    "stock_coverage": {
+      "critical_days": 3,
+      "high_days": 7,
+      "medium_days": 14,
+      "low_days": 30
+    }
+  },
+  "optimization": {
+    "criteria_weights": {
+      "cost": 0.45,
+      "downtime": 0.30,
+      "co2": 0.10,
+      "implementation_risk": 0.15
+    },
+    "options": [
+      "source_switch",
+      "route_change",
+      "expedited_shipping",
+      "inventory_transfer",
+      "local_production"
+    ]
+  },
+  "output": {
+    "format": "structured_markdown",
+    "sections": [
+      "signal_summary",
+      "risk_assessment",
+      "impact_analysis",
+      "mitigation_options",
+      "recommendation",
+      "rationale_chain"
+    ],
+    "llm_use": "text_generation_only"
+  }
+}
