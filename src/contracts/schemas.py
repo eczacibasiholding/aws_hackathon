@@ -5,7 +5,7 @@ from datetime import date, datetime
 from typing import Annotated, Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
-SEMA_VERSIYONU = "1.0"
+SEMA_VERSIYONU = "1.1"   # D10: KararKaydi genişletmesi (SCOPE §5.1)
 
 # ---------- Kimlik tipleri (§3) ----------
 def _id(p: str):
@@ -325,12 +325,16 @@ class OneriRakamlari(Sozlesme):
 class DecisionMetinLLM(Sozlesme):                        # LLM SINIR MODELİ
     gerekce: str                                         # kısa, rakamlı, Türkçe; rakamlar yalnızca OneriRakamlari'ndan
     dikkat_notu: Optional[str] = None                    # MILP–ÇKKV çelişkisi vb.
+    olay_tipi: Optional[Literal["Tedarik", "Lojistik", "Birleşik (Tedarik + Lojistik)"]] = None  # v1.1
+    olay_ozeti: Optional[str] = None                     # v1.1, tek cümle; rakam testi geçerli
 
 
 class OneriKarti(Sozlesme):
     baslik: str                                          # ekran metni (iş birimi onaylı)
     gerekce: Optional[str] = None                        # DecisionMetinLLM.gerekce; LLM hatasında None
     dikkat_notu: Optional[str] = None
+    olay_tipi: Optional[Literal["Tedarik", "Lojistik", "Birleşik (Tedarik + Lojistik)"]] = None  # v1.1
+    olay_ozeti: Optional[str] = None                     # v1.1
     onerilen_strateji_kodu: Optional[StratejiKodu] = None   # uygun strateji yoksa None
     rakamlar: OneriRakamlari
     butonlar: list[Literal["Onayla", "Reddet", "Değiştir"]] = ["Onayla", "Reddet", "Değiştir"]
@@ -387,6 +391,7 @@ class InsanKarari(Sozlesme):
     onaylayan_rol: str                                   # rol; kişi adı DEĞİL (G11)
     karar_zamani: datetime
     revize_notu: Optional[str] = None                    # "Değiştir" seçildiyse
+    yanlis_alarm: bool = False                           # v1.1 (SCOPE §5.1)
 
 
 class KararKaydi(Sozlesme):
@@ -407,6 +412,17 @@ class KararKaydi(Sozlesme):
     oneri_suresi_dk: Optional[float] = Field(None, ge=0)
     onay_suresi_dk: Optional[float] = Field(None, ge=0)
     revize_notu: Optional[str] = None
+    # ---- v1.1 (SCOPE D10, §5.1) ----
+    tarih: Optional[date] = None
+    kurulus_kodu: Optional[str] = None
+    olay_tipi: Optional[Literal["Tedarik", "Lojistik", "Birleşik (Tedarik + Lojistik)"]] = None
+    olay_ozeti: Optional[str] = None
+    sinyal_yayin_zamani: Optional[datetime] = None
+    onerilen_aksiyon: Optional[str] = None
+    yanlis_alarm_mi: bool = False
+    risk_gerceklesmeden_aksiyon: Optional[bool] = None
+    onlenen_durus_gun: Optional[float] = None
+    kullanici_geri_bildirimi: Optional[str] = None
 
 
 class SignalLLMCikarimi(Sozlesme):                       # LLM SINIR MODELİ

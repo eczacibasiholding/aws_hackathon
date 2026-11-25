@@ -1,0 +1,9 @@
+# Gönderen alan adı -> Risk_Kaynaklari.Kaynak Kodu (SCOPE §4.5). Gizli bilgi yok.
+# Eşleşme yoksa Kaynak Kodu = null + ESLESME_YOK uyarısı.
+alan_adlari:
+  akhfeeder.example.com: KY02      # Taşıyıcı müşteri bildirimi
+  carrier.example.com: KY02
+  ais.example.com: KY03            # Gemi / uçak takip verisi
+  supplier.example.com: KY01       # Tedarikçi resmi bildirimi
+  gujaratpharmachem.example.com: KY01
+  gov.example.com: KY06            # Resmi kurum duyurusu

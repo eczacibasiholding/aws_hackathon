@@ -98,7 +98,7 @@ from datetime import date, datetime
 from typing import Annotated, Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
-SEMA_VERSIYONU = "1.0"
+SEMA_VERSIYONU = "1.1"   # D10
 
 # ---------- Kimlik tipleri (§3) ----------
 def _id(p: str):
@@ -556,3 +556,8 @@ Beklenen değerler yalnızca `tests/fixtures/nexus_answer_key.xlsx`'ten okunur (
 - **What-if:** Impact, Risk, Options ve Decision çıktıları yeni `run_id` ile ama **aynı** `risk_no` ile üretilir. `Zarf.what_if_gun` uygulanan değeri taşır, `DecisionOutput.what_if_karsilastirma` önceki öneriyle farkı gösterir.
 - **Karar kaydının Excel'e yazımı:** `KararKaydi` alanları cevap anahtarındaki `Karar_Kaydi` sayfası başlıklarıyla eşlenir. nexus-data.md bu sayfanın sütun adlarını listelemediği için eşleme tablosu, başlıklar dosyadan okunduktan sonra bu bölüme eklenecek. Sütun adı tahmin edilmez.
 - Pydantic bir Python kütüphanesidir. LLM veya servis değildir, izinli servis listesini (R3) değiştirmez.
+
+
+## 9. v1.1 değişikliği (SCOPE D10)
+
+`KararKaydi`'na SCOPE §5.1'deki yeni alanlar (`tarih`, `kurulus_kodu`, `olay_tipi`, `olay_ozeti`, `sinyal_yayin_zamani`, `onerilen_aksiyon`, `yanlis_alarm_mi`, `risk_gerceklesmeden_aksiyon`, `onlenen_durus_gun`, `kullanici_geri_bildirimi`) ve `InsanKarari.yanlis_alarm` eklendi. Kanonik kod: `src/contracts/schemas.py`.
