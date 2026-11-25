@@ -155,10 +155,46 @@ def sinyal_isle(payload: dict) -> dict:
         kayit = _karar_kaydi(data, st, olay_no, risk_no, sig, imp, opt, dec)
         st.put(f"decisions/{olay_no}.json", _dump(kayit))
         ozet.update(olay_no=olay_no, oneri=dec.oneri_karti.onerilen_strateji_kodu)
+        _bildir(sig, rsk, kayit, dec)
         return bitir("ONAY_BEKLIYOR")
     except Exception as e:  # O2: sözleşme/Bedrock/zaman aşımı → HATA
         log.exception("akış hatası")
         return bitir("HATA", hata=f"{type(e).__name__}: {e}", not_="tamamlanamadı")
+
+
+def _tl(v):
+    return "—" if v is None else f"{v:,.0f}".replace(",", ".") + " TL"
+
+
+def _bildir(sig, rsk, kayit, dec) -> None:
+    """Onaya hazır öneri için SES bildirimi (NEXUS_BILDIRIM_EPOSTA). Karar insandadır; e-posta yalnızca haber verir.
+    Rakamlar ajan çıktılarından kopyalanır, hesap yapılmaz. Hata akışı durdurmaz."""
+    alici = os.environ.get("NEXUS_BILDIRIM_EPOSTA")
+    if not alici:
+        return
+    try:
+        import boto3
+
+        kart = dec.oneri_karti
+        ui = os.environ.get("NEXUS_UI_URL", "")
+        govde = "\n".join([
+            f"Yeni yüksek risk onay bekliyor: {kayit.olay_no} ({kayit.risk_no})",
+            f"Sinyal: {sig.sinyal_no} · Sevkiyat: {', '.join(sig.ilgili_sevkiyat)} · Malzeme: {', '.join(sig.ilgili_malzeme)}",
+            f"Risk: olasılık {rsk.olasilik} × etki {rsk.etki} = {rsk.risk_puani} ({rsk.risk_kademesi})",
+            f"Öneri: {kayit.onerilen_aksiyon} ({kart.onerilen_strateji_kodu})",
+            f"Hiçbir şey yapmamanın maliyeti: {_tl(kayit.aksiyonsuz_maliyet_try)}",
+            f"Önerilen maliyet: {_tl(kayit.onerilen_maliyet_try)} · Tasarruf: {_tl(kayit.tasarruf_try)}",
+            "", kart.gerekce or "", "", f"Onay ekranı: {ui}" if ui else "",
+            "Sistem sipariş vermez; karar yetkilidedir.",
+        ])
+        boto3.client("sesv2").send_email(
+            FromEmailAddress=os.environ.get("NEXUS_BILDIRIM_GONDEREN", alici),
+            Destination={"ToAddresses": [alici]},
+            Content={"Simple": {"Subject": {"Data": f"NEXUS · {kayit.risk_no} Yüksek risk · onay bekliyor ({kayit.olay_no})", "Charset": "UTF-8"},
+                                "Body": {"Text": {"Data": govde, "Charset": "UTF-8"}}}})
+        log.info("bildirim gönderildi olay=%s", kayit.olay_no)  # alıcı adresi loglanmaz (KÇ5)
+    except Exception as e:
+        log.warning("bildirim gönderilemedi: %s", e)
 
 
 def _sinyal_satiri(data, sinyal_no: str) -> dict:
