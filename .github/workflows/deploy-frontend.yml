@@ -27,6 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # Which repos may assume this role is set with scripts/connect_github_repo.sh
       - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::242872169400:role/nexus-github-frontend-deploy

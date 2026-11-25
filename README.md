@@ -103,3 +103,16 @@ D0 = 25.11.2026
 - Elle deploy: `./scripts/deploy_frontend.sh`
 - Otomatik deploy: `main` dalına `frontend/**` değişikliği push edilince `.github/workflows/deploy-frontend.yml` çalışır. AWS'ye GitHub OIDC ile bağlanır (saklanan erişim anahtarı yok). Rol `nexus-github-frontend-deploy` yalnızca bu reponun `main` dalına güvenir ve yalnızca bu bucket'a yazabilir. GitHub bu repo için token'daki `sub` değerini ID'li gönderir (`repo:eczacibasiholding@282631194/aws_hackathon@1471609910:ref:refs/heads/main`); repo yeniden açılır ya da taşınırsa rolün güven koşulu bu değere göre güncellenmelidir.
 - Dosyalar `Cache-Control: no-cache` ile yüklenir. CloudFront nesneyi en fazla 1 saniye tutar, bu yüzden deploy sonrası cache temizlemeye (invalidation) gerek yoktur.
+
+### Frontend'i başka bir repoya bağlama
+
+Frontend repoya bağımlı değildir; AWS tarafındaki tek repo bağı deploy rolünün güven koşuludur.
+
+1. Yeni repoya şu dosyaları kopyala: `frontend/`, `scripts/deploy_frontend.sh`, `.github/workflows/deploy-frontend.yml`.
+2. Rolün hangi repolara güveneceğini ayarla (liste mevcut listenin **yerine** geçer; deploy etmeye devam edecek tüm repoları yaz):
+   ```bash
+   ./scripts/connect_github_repo.sh yeni-sahip/yeni-repo                       # yalnız yeni repo
+   ./scripts/connect_github_repo.sh eczacibasiholding/aws_hackathon yeni-sahip/yeni-repo   # ikisi birden
+   ```
+   Özel (private) repoda ID'leri okuyabilmek için `GH_TOKEN` ortam değişkeni gerekir. Varsayılan dal `main`'dir, değiştirmek için `BRANCH=...`.
+3. Yeni repoda `main` dalına `frontend/` altında bir değişiklik push et; workflow aynı bucket'a ve aynı HTTPS adresine deploy eder.
