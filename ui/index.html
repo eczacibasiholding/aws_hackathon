@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEXUS · Risk Müdahale</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">NEXUS <span>Tedarik zinciri risk müdahalesi</span></div>
+  <nav id="tabs">
+    <button data-ekran="1" class="aktif">1 · Uyarı paneli</button>
+    <button data-ekran="2">2 · Etki</button>
+    <button data-ekran="3">3 · Seçenekler</button>
+    <button data-ekran="4">4 · Öneri ve onay</button>
+  </nav>
+  <div class="sag">
+    <a id="haritaLink" target="_blank" rel="noopener">Tedarik zinciri haritası ↗</a>
+    <span id="mod" class="rozet"></span>
+    <span id="yenileme" class="soluk"></span>
+  </div>
+</header>
+
+<main>
+  <section id="ekran1" class="ekran aktif">
+    <div class="izgara iki">
+      <div>
+        <div class="kart"><h2>Gelen sinyal <small id="sinyalNo"></small></h2>
+          <pre id="hamMetin" class="metin"></pre>
+          <div id="cikarilan" class="alanlar"></div>
+        </div>
+        <div class="kart" id="riskKarti"></div>
+      </div>
+      <div>
+        <div class="kart"><h2>İzlenen riskler</h2>
+          <table id="runTablo"><thead><tr><th>Zaman</th><th>Sinyal</th><th>Sevkiyat / Malzeme</th><th>Puan</th><th>Kademe</th><th>Durum</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="kart"><h2>E-posta gönder (yedek)</h2>
+          <p class="soluk">Metin S3 <code>inbound-email/</code> önekine yüklenir; akış e-postayla aynıdır.</p>
+          <textarea id="epostaMetin" rows="6" placeholder="E-posta gövdesini yapıştırın…"></textarea>
+          <button id="epostaGonder" class="birincil">Gönder</button> <span id="epostaDurum" class="soluk"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ekran2" class="ekran">
+    <div class="kart"><h2>Etki <small id="etkiBaslik"></small></h2>
+      <div id="etkiKutular" class="kutular"></div>
+    </div>
+    <div class="izgara iki">
+      <div class="kart"><h2>Zaman çizelgesi</h2><ul id="zaman" class="zaman"></ul></div>
+      <div class="kart"><h2>Risk altındaki siparişler</h2>
+        <table id="siparisTablo"><thead><tr><th>Sipariş</th><th>Hat</th><th>Gerekli üretim</th><th>Gecikme</th><th>Ceza</th></tr></thead><tbody></tbody></table>
+        <div id="etkiDetay" class="alanlar"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ekran3" class="ekran">
+    <div class="kart"><h2>Stratejiler</h2><div id="stratejiler" class="stratejiler"></div></div>
+    <div class="kart" id="milpKart"></div>
+  </section>
+
+  <section id="ekran4" class="ekran">
+    <div class="kart oneri" id="oneriKart"></div>
+    <div class="kart"><h2>Karar kayıtları</h2>
+      <table id="kararTablo"><thead><tr><th>Olay No</th><th>Risk</th><th>Önerilen aksiyon</th><th>Tasarruf</th><th>Karar</th><th>Yanlış alarm</th><th>Geri bildirim</th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+</main>
+<footer class="soluk">Karar insandadır: sistem sipariş vermez, ERP'ye yazmaz. Rakamlar agent çıktılarından okunur.</footer>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

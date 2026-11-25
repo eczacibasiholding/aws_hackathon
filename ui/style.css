@@ -1,0 +1,40 @@
+:root{--bg:#06111d;--panel:#0a1b2c;--cizgi:#173049;--yazi:#dce8f5;--soluk:#8ba3bc;--gri:#94a3b8;--mavi:#4fb3e8;--mavi2:#3d84aa;--kirmizi:#ef4444;--kirmizi2:#ff8a8a;--turuncu:#f59e0b;--yesil:#22c55e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--yazi);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:12px 20px;background:var(--panel);border-bottom:1px solid var(--cizgi);position:sticky;top:0;z-index:5}
+.brand{font-weight:700;font-size:18px;color:var(--mavi)}.brand span{font-weight:400;font-size:13px;color:var(--soluk);margin-left:6px}
+nav button{background:none;border:1px solid var(--cizgi);color:var(--soluk);padding:7px 12px;border-radius:6px;cursor:pointer;margin-right:4px}
+nav button.aktif{color:var(--yazi);border-color:var(--mavi);background:#0e2a42}
+.sag{margin-left:auto;display:flex;gap:12px;align-items:center}
+a{color:var(--mavi)}
+main{padding:16px 20px}
+.ekran{display:none}.ekran.aktif{display:block}
+.izgara.iki{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:1000px){.izgara.iki{grid-template-columns:1fr}}
+.kart{background:var(--panel);border:1px solid var(--cizgi);border-radius:10px;padding:14px 16px;margin-bottom:16px}
+h2{margin:0 0 10px;font-size:15px;color:var(--yazi)}h2 small{color:var(--soluk);font-weight:400;margin-left:6px}
+.soluk{color:var(--soluk)}
+.metin{white-space:pre-wrap;background:#081624;border:1px solid var(--cizgi);border-radius:6px;padding:10px;font-family:inherit;margin:0 0 10px;max-height:200px;overflow:auto}
+.alanlar{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.alan{background:#081624;border-radius:6px;padding:8px}.alan b{display:block;color:var(--soluk);font-weight:400;font-size:12px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--cizgi)}th{color:var(--soluk);font-weight:500;font-size:12px}
+tbody tr{cursor:pointer}tbody tr:hover,tbody tr.secili{background:#0e2a42}
+.rozet{padding:2px 8px;border-radius:10px;font-size:12px;border:1px solid var(--cizgi)}
+.k-Yüksek{background:#3b0d0d;color:var(--kirmizi2);border-color:var(--kirmizi)}.k-Orta{background:#3a2606;color:var(--turuncu);border-color:var(--turuncu)}.k-Düşük{background:#0c2a1a;color:var(--yesil);border-color:var(--yesil)}
+.risk{display:flex;align-items:center;gap:16px;font-size:20px;flex-wrap:wrap}.risk .buyuk{font-size:34px;font-weight:700}
+.kutular{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}@media(max-width:900px){.kutular{grid-template-columns:1fr 1fr}}
+.kutu{background:#081624;border:1px solid var(--cizgi);border-radius:8px;padding:14px}.kutu b{display:block;color:var(--soluk);font-weight:400;font-size:12px;margin-bottom:6px}.kutu span{font-size:22px;font-weight:700}
+.kutu.kirmizi span{color:var(--kirmizi2)}
+.zaman{list-style:none;padding:0;margin:0;border-left:2px solid var(--mavi2)}.zaman li{padding:6px 12px;position:relative}.zaman li:before{content:"";position:absolute;left:-6px;top:11px;width:10px;height:10px;border-radius:50%;background:var(--mavi)}.zaman li.kritik:before{background:var(--kirmizi)}
+.stratejiler{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.strateji{background:#081624;border:1px solid var(--cizgi);border-radius:8px;padding:12px}.strateji.onerilen{border-color:var(--yesil);box-shadow:0 0 0 1px var(--yesil)}
+.strateji h3{margin:0 0 8px;font-size:14px}.strateji dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:0}.strateji dt{color:var(--soluk)}.strateji dd{margin:0;text-align:right}
+.etiket{display:inline-block;background:var(--yesil);color:#06111d;font-weight:700;font-size:11px;padding:2px 6px;border-radius:4px;margin-bottom:6px}
+.oneri h2{font-size:18px}.oneri .gerekce{font-size:15px;line-height:1.5;background:#081624;padding:12px;border-radius:6px}
+.butonlar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+button.birincil,.butonlar button{padding:9px 16px;border-radius:6px;border:1px solid var(--mavi);background:var(--mavi2);color:#fff;cursor:pointer;font-weight:600}
+.butonlar .onayla{background:#15803d;border-color:var(--yesil)}.butonlar .reddet{background:#7f1d1d;border-color:var(--kirmizi)}.butonlar .degistir{background:#78350f;border-color:var(--turuncu)}
+button:disabled{opacity:.5;cursor:not-allowed}
+textarea{width:100%;background:#081624;color:var(--yazi);border:1px solid var(--cizgi);border-radius:6px;padding:8px;font-family:inherit;margin-bottom:8px}
+footer{padding:10px 20px}
+code{color:var(--mavi)}

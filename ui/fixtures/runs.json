@@ -1,0 +1,71 @@
+{
+ "runs": [
+  {
+   "run_id": "run-20261125-0921-s1",
+   "sinyal_no": "SG-2611-001",
+   "durum": "ONAY_BEKLIYOR",
+   "risk_no": "R-01",
+   "sevkiyat_no": "SV-26-1184",
+   "malzeme_no": "MT100054",
+   "risk_puani": 22,
+   "risk_kademesi": "Yüksek",
+   "olasilik": 4.4,
+   "etki": 5,
+   "olay_no": "NXS-26-025",
+   "karar": "Onay Bekliyor",
+   "baslangic_zamani": "2026-11-25T09:21:04+03:00",
+   "bitis_zamani": "2026-11-25T09:22:48+03:00",
+   "kaynak": "EMAIL"
+  },
+  {
+   "run_id": "run-20261125-0815-sg004",
+   "sinyal_no": "SG-2611-004",
+   "durum": "UYARI",
+   "risk_no": "R-02",
+   "sevkiyat_no": "SV-26-1192",
+   "malzeme_no": "MT100071",
+   "risk_puani": 12,
+   "risk_kademesi": "Orta",
+   "olasilik": 3.0,
+   "etki": 4,
+   "olay_no": null,
+   "karar": null,
+   "baslangic_zamani": "2026-11-25T08:15:00+03:00",
+   "bitis_zamani": "2026-11-25T08:16:10+03:00",
+   "kaynak": "TOPLU_TARAMA"
+  },
+  {
+   "run_id": "run-20261125-0814-sg003",
+   "sinyal_no": "SG-2611-003",
+   "durum": "IZLEME",
+   "risk_no": "R-03",
+   "sevkiyat_no": null,
+   "malzeme_no": "MT100054",
+   "risk_puani": 6,
+   "risk_kademesi": "Düşük",
+   "olasilik": 2.0,
+   "etki": 3,
+   "olay_no": null,
+   "karar": null,
+   "baslangic_zamani": "2026-11-25T08:14:00+03:00",
+   "bitis_zamani": "2026-11-25T08:14:50+03:00",
+   "kaynak": "TOPLU_TARAMA"
+  },
+  {
+   "run_id": "run-20261125-0813-sg013",
+   "sinyal_no": "SG-2611-013",
+   "durum": "KAPAT",
+   "risk_no": null,
+   "sevkiyat_no": null,
+   "malzeme_no": null,
+   "risk_puani": null,
+   "risk_kademesi": null,
+   "olay_no": null,
+   "karar": null,
+   "baslangic_zamani": "2026-11-25T08:13:00+03:00",
+   "bitis_zamani": "2026-11-25T08:13:12+03:00",
+   "kaynak": "TOPLU_TARAMA",
+   "aciklama": "Gürültü: ilgisiz haber"
+  }
+ ]
+}

@@ -1,0 +1,622 @@
+{
+ "run_id": "run-20261125-0921-s1",
+ "summary": {
+  "run_id": "run-20261125-0921-s1",
+  "sinyal_no": "SG-2611-001",
+  "durum": "ONAY_BEKLIYOR",
+  "risk_no": "R-01",
+  "sevkiyat_no": "SV-26-1184",
+  "malzeme_no": "MT100054",
+  "risk_puani": 22,
+  "risk_kademesi": "Yüksek",
+  "olasilik": 4.4,
+  "etki": 5,
+  "olay_no": "NXS-26-025",
+  "karar": "Onay Bekliyor",
+  "baslangic_zamani": "2026-11-25T09:21:04+03:00",
+  "bitis_zamani": "2026-11-25T09:22:48+03:00",
+  "kaynak": "EMAIL"
+ },
+ "signal": {
+  "sema_versiyonu": "1.1",
+  "run_id": "run-20261125-0921-s1",
+  "agent": "signal",
+  "senaryo": null,
+  "risk_no": "R-01",
+  "d0": "2026-11-25",
+  "what_if_gun": 0,
+  "baslangic_zamani": "2026-11-25T09:21:04+03:00",
+  "bitis_zamani": "2026-11-25T09:21:19+03:00",
+  "durum": "TAMAM",
+  "uyarilar": [],
+  "sinyal_no": "SG-2611-001",
+  "isleme_karari": "ANALIZ",
+  "ayiklama_nedeni": null,
+  "olay_tipi": "Liman sıkışıklığı / transit gecikme",
+  "ulke_bolge": "Suudi Arabistan (Cidde) / Kızıldeniz",
+  "ilgili_taraf": [
+   "TS03"
+  ],
+  "ilgili_sevkiyat": [
+   "SV-26-1184"
+  ],
+  "ilgili_malzeme": [
+   "MT100054"
+  ],
+  "tahmini_gecikme_gun": 8,
+  "alternatif_ipucu": "Mersin'e liman değişikliği mümkün (varış limanı değişikliği ücreti)",
+  "sinyal_guvenilirligi": 5,
+  "tespit_gecikmesi_saat": 0.13,
+  "bagli_risk_no": "R-01",
+  "kanit": {
+   "metin_alintilari": [
+    "Revised ETA Ambarli: 05-Dec-2026 (previous: 27-Nov-2026)",
+    "Affected bookings include AKH-MUN-26-1184",
+    "Option: discharge at Mersin on an earlier feeder"
+   ],
+   "eslesme_yolu": "Takip No AKH-MUN-26-1184 → Sevkiyatlar.Takip No → SV-26-1184"
+  },
+  "kaynak": [
+   {
+    "sayfa": "Risk_Sinyalleri",
+    "anahtarlar": [
+     "SG-2611-001"
+    ],
+    "sutunlar": [
+     "Ham Metin (LLM Girdisi)"
+    ]
+   }
+  ],
+  "dogrulama_uyarilari": [],
+  "ham_metin": "CUSTOMER ADVISORY – AKH Feeder Services. Due to continued congestion at Jeddah Islamic Port transshipment hub and knock-on effects of Red Sea diversions, connecting vessel MV AEGEAN STAR voy. 46W has been re-scheduled. Revised ETA Ambarli: 05-Dec-2026 (previous: 27-Nov-2026). Affected bookings include AKH-MUN-26-1184. Option: discharge at Mersin on an earlier feeder, subject to change-of-destination fee."
+ },
+ "risk": {
+  "sema_versiyonu": "1.1",
+  "run_id": "run-20261125-0921-s1",
+  "agent": "risk",
+  "senaryo": null,
+  "risk_no": "R-01",
+  "d0": "2026-11-25",
+  "what_if_gun": 0,
+  "baslangic_zamani": "2026-11-25T09:21:20+03:00",
+  "bitis_zamani": "2026-11-25T09:21:41+03:00",
+  "durum": "TAMAM",
+  "uyarilar": [],
+  "bilesenler": {
+   "sinyal": 5,
+   "performans": {
+    "puan": 4,
+    "taraf": "TS03",
+    "kaynak_sutun": "Zamanında Varış Oranı",
+    "secim_gerekcesi": "Gecikme taşıyıcı kaynaklı; taşıyıcı performansı kullanıldı."
+   },
+   "dis_kosul": {
+    "puan": 4,
+    "gerekce": "Kızıldeniz sapmaları ve Cidde sıkışıklığı sürüyor.",
+    "kanit_sinyaller": [
+     "SG-2611-001",
+     "SG-2611-002"
+    ]
+   },
+   "finansal": null
+  },
+  "olasilik": 4.4,
+  "etki": 5,
+  "risk_puani": 22,
+  "risk_kademesi": "Yüksek",
+  "agent_aksiyonu": "Tam analiz + onaya sun",
+  "aciklama": "Doğrulanmış taşıyıcı bildirimi 8 günlük gecikme gösteriyor; stok kapsaması kullanılabilir tarihten önce bitiyor.",
+  "kaynak": []
+ },
+ "impact": {
+  "sema_versiyonu": "1.1",
+  "run_id": "run-20261125-0921-s1",
+  "agent": "impact",
+  "senaryo": null,
+  "risk_no": "R-01",
+  "d0": "2026-11-25",
+  "what_if_gun": 0,
+  "baslangic_zamani": "2026-11-25T09:21:20+03:00",
+  "bitis_zamani": "2026-11-25T09:21:33+03:00",
+  "durum": "TAMAM",
+  "uyarilar": [],
+  "sevkiyat_no": "SV-26-1184",
+  "malzeme_no": "MT100054",
+  "tesis_kodu": "TS-IST",
+  "hat_kodu": "HAT-S1",
+  "olcu_birimi": "KG",
+  "serbest_stok": 600,
+  "gunluk_tuketim": 60.69,
+  "stok_kapsama_gun": 9.89,
+  "tukenme_tarihi": "2026-12-04T21:16:00+03:00",
+  "planlanan_kullanilabilir_tarih": "2026-12-02",
+  "guncel_kullanilabilir_tarih": "2026-12-10",
+  "kullanilabilir_gun": 15,
+  "acik_durus_gun": 5.11,
+  "gunluk_durus_maliyeti_try": 420000,
+  "yeniden_baslatma_maliyeti_try": 144818,
+  "durus_maliyeti_try": 2291018,
+  "risk_altindaki_siparisler": [
+   {
+    "siparis_no": "SO-26-3101",
+    "hat_kodu": "HAT-S1",
+    "gerekli_uretim_tarihi": "2026-12-06",
+    "gecikme_gun": 4.0,
+    "gunluk_ceza_try": null,
+    "ceza_try": 150000
+   },
+   {
+    "siparis_no": "SO-26-3102",
+    "hat_kodu": "HAT-S1",
+    "gerekli_uretim_tarihi": "2026-12-07",
+    "gecikme_gun": 3.0,
+    "gunluk_ceza_try": null,
+    "ceza_try": 100000
+   },
+   {
+    "siparis_no": "SO-26-3107",
+    "hat_kodu": "HAT-S1",
+    "gerekli_uretim_tarihi": "2026-12-08",
+    "gecikme_gun": 2.0,
+    "gunluk_ceza_try": null,
+    "ceza_try": 100000
+   },
+   {
+    "siparis_no": "SO-26-3110",
+    "hat_kodu": "HAT-S1",
+    "gerekli_uretim_tarihi": "2026-12-09",
+    "gecikme_gun": 1.0,
+    "gunluk_ceza_try": null,
+    "ceza_try": 100000
+   }
+  ],
+  "olasi_ceza_try": 450000,
+  "aksiyonsuz_maliyet_try": 2741018,
+  "etki_puani": 5,
+  "zaman_cizelgesi": [
+   {
+    "tarih": "2026-11-25",
+    "olay": "Analiz (D0)"
+   },
+   {
+    "tarih": "2026-12-04T21:16",
+    "olay": "Stok tükenir"
+   },
+   {
+    "tarih": "2026-12-05",
+    "olay": "ETA Ambarlı"
+   },
+   {
+    "tarih": "2026-12-06",
+    "olay": "Gümrük"
+   },
+   {
+    "tarih": "2026-12-07",
+    "olay": "İç nakliye"
+   },
+   {
+    "tarih": "2026-12-10",
+    "olay": "Kalite onayı → kullanılabilir"
+   }
+  ],
+  "kaynak": []
+ },
+ "options": {
+  "sema_versiyonu": "1.1",
+  "run_id": "run-20261125-0921-s1",
+  "agent": "options",
+  "senaryo": null,
+  "risk_no": "R-01",
+  "d0": "2026-11-25",
+  "what_if_gun": 0,
+  "baslangic_zamani": "2026-11-25T09:21:42+03:00",
+  "bitis_zamani": "2026-11-25T09:22:10+03:00",
+  "durum": "TAMAM",
+  "uyarilar": [],
+  "stratejiler": [
+   {
+    "strateji_kodu": "S1-BEKLE",
+    "strateji_adi": "Hiçbir şey yapma",
+    "bilesenler": [],
+    "uygun_mu": true,
+    "eleme_nedeni": null
+   },
+   {
+    "strateji_kodu": "S1-TRF",
+    "strateji_adi": "Sadece transfer",
+    "bilesenler": [
+     {
+      "bilesen_no": 1,
+      "tip": "TRANSFER",
+      "kaynak": "D-SG-01|MT100054",
+      "rota_kodu": null,
+      "miktar": 260,
+      "olcu_birimi": "KG",
+      "brut_kg": null,
+      "hazir_gun": 1,
+      "lojistik_maliyet_try": 3200,
+      "ek_malzeme_maliyeti_try": 0,
+      "test_maliyeti_try": 0,
+      "co2_kg": 40,
+      "uygulama_riski": 2,
+      "kisit_kontrolu": {
+       "sonuc": "GEÇTİ",
+       "kontroller": [
+        "C1",
+        "C2",
+        "C3"
+       ],
+       "kalan_kisitlar": []
+      }
+     }
+    ],
+    "uygun_mu": true,
+    "eleme_nedeni": null
+   },
+   {
+    "strateji_kodu": "S1-KUC",
+    "strateji_adi": "Kısmi uçak",
+    "bilesenler": [
+     {
+      "bilesen_no": 1,
+      "tip": "ALTERNATIF_TEDARIK_ROTA",
+      "kaynak": "TD5012|Şanghay→İstanbul",
+      "rota_kodu": null,
+      "miktar": 400,
+      "olcu_birimi": "KG",
+      "brut_kg": null,
+      "hazir_gun": 8,
+      "lojistik_maliyet_try": 80000,
+      "ek_malzeme_maliyeti_try": 0,
+      "test_maliyeti_try": 0,
+      "co2_kg": 1900,
+      "uygulama_riski": 2,
+      "kisit_kontrolu": {
+       "sonuc": "GEÇTİ",
+       "kontroller": [
+        "C1",
+        "C2",
+        "C3"
+       ],
+       "kalan_kisitlar": []
+      }
+     }
+    ],
+    "uygun_mu": true,
+    "eleme_nedeni": null
+   },
+   {
+    "strateji_kodu": "S1-UCK",
+    "strateji_adi": "Tamamı uçak",
+    "bilesenler": [
+     {
+      "bilesen_no": 1,
+      "tip": "ALTERNATIF_TEDARIK_ROTA",
+      "kaynak": "TD5012|Şanghay→İstanbul",
+      "rota_kodu": null,
+      "miktar": 1500,
+      "olcu_birimi": "KG",
+      "brut_kg": null,
+      "hazir_gun": 8,
+      "lojistik_maliyet_try": 300000,
+      "ek_malzeme_maliyeti_try": 0,
+      "test_maliyeti_try": 0,
+      "co2_kg": 7100,
+      "uygulama_riski": 2,
+      "kisit_kontrolu": {
+       "sonuc": "GEÇTİ",
+       "kontroller": [
+        "C1",
+        "C2",
+        "C3"
+       ],
+       "kalan_kisitlar": []
+      }
+     }
+    ],
+    "uygun_mu": true,
+    "eleme_nedeni": null
+   },
+   {
+    "strateji_kodu": "S1-MER",
+    "strateji_adi": "Mersin'e liman değişikliği",
+    "bilesenler": [
+     {
+      "bilesen_no": 1,
+      "tip": "ROTA_DEGISIKLIGI",
+      "kaynak": "SV-26-1184",
+      "rota_kodu": null,
+      "miktar": 600,
+      "olcu_birimi": "KG",
+      "brut_kg": null,
+      "hazir_gun": 11,
+      "lojistik_maliyet_try": 54000,
+      "ek_malzeme_maliyeti_try": 0,
+      "test_maliyeti_try": 0,
+      "co2_kg": 900,
+      "uygulama_riski": 2,
+      "kisit_kontrolu": {
+       "sonuc": "GEÇTİ",
+       "kontroller": [
+        "C1",
+        "C2",
+        "C3"
+       ],
+       "kalan_kisitlar": []
+      }
+     }
+    ],
+    "uygun_mu": true,
+    "eleme_nedeni": null
+   },
+   {
+    "strateji_kodu": "S1-HIB",
+    "strateji_adi": "Depodan 260 kg + Zhejiang'dan uçakla 250 kg",
+    "bilesenler": [
+     {
+      "bilesen_no": 1,
+      "tip": "TRANSFER",
+      "kaynak": "D-SG-01|MT100054",
+      "rota_kodu": null,
+      "miktar": 260,
+      "olcu_birimi": "KG",
+      "brut_kg": null,
+      "hazir_gun": 1,
+      "lojistik_maliyet_try": 3200,
+      "ek_malzeme_maliyeti_try": 0,
+      "test_maliyeti_try": 0,
+      "co2_kg": 40,
+      "uygulama_riski": 2,
+      "kisit_kontrolu": {
+       "sonuc": "GEÇTİ",
+       "kontroller": [
+        "C1",
+        "C2",
+        "C3"
+       ],
+       "kalan_kisitlar": []
+      }
+     },
+     {
+      "bilesen_no": 2,
+      "tip": "ALTERNATIF_TEDARIK_ROTA",
+      "kaynak": "TD5012|Şanghay→İstanbul",
+      "rota_kodu": null,
+      "miktar": 250,
+      "olcu_birimi": "KG",
+      "brut_kg": null,
+      "hazir_gun": 8,
+      "lojistik_maliyet_try": 52000,
+      "ek_malzeme_maliyeti_try": 0,
+      "test_maliyeti_try": 0,
+      "co2_kg": 1200,
+      "uygulama_riski": 2,
+      "kisit_kontrolu": {
+       "sonuc": "GEÇTİ",
+       "kontroller": [
+        "C1",
+        "C2",
+        "C3"
+       ],
+       "kalan_kisitlar": []
+      }
+     }
+    ],
+    "uygun_mu": true,
+    "eleme_nedeni": null
+   }
+  ],
+  "elenen_kaynaklar": [
+   {
+    "kaynak": "TD5020|MT100054",
+    "neden": "Kalifikasyon süresi uzun",
+    "hazir_gun": 56
+   }
+  ],
+  "kaynak": []
+ },
+ "decision": {
+  "sema_versiyonu": "1.1",
+  "run_id": "run-20261125-0921-s1",
+  "agent": "decision",
+  "senaryo": null,
+  "risk_no": "R-01",
+  "d0": "2026-11-25",
+  "what_if_gun": 0,
+  "baslangic_zamani": "2026-11-25T09:22:11+03:00",
+  "bitis_zamani": "2026-11-25T09:22:48+03:00",
+  "durum": "TAMAM",
+  "uyarilar": [],
+  "simulasyon": [],
+  "karsilastirma": [
+   {
+    "strateji_kodu": "S1-BEKLE",
+    "strateji_adi": "Hiçbir şey yapma",
+    "uygun_mu": true,
+    "durus_gun": 5.11,
+    "maliyet_kalemleri": {
+     "durus": 2291018,
+     "ceza": 450000,
+     "lojistik": 0,
+     "ek_malzeme": 0,
+     "test": 0,
+     "stok_tasima": 0
+    },
+    "toplam_maliyet_try": 2741018,
+    "co2_kg": 0,
+    "risk": 1.0,
+    "normalize": {
+     "maliyet": null,
+     "durus": null,
+     "co2": null,
+     "risk": null
+    },
+    "agirlikli_skor": 0.312,
+    "sira": 6,
+    "oneri": null
+   },
+   {
+    "strateji_kodu": "S1-TRF",
+    "strateji_adi": "Sadece transfer",
+    "uygun_mu": true,
+    "durus_gun": 0.83,
+    "maliyet_kalemleri": {
+     "durus": 500000,
+     "ceza": 50000,
+     "lojistik": 4863,
+     "ek_malzeme": 0,
+     "test": 0,
+     "stok_tasima": 0
+    },
+    "toplam_maliyet_try": 554863,
+    "co2_kg": 40,
+    "risk": 1.5,
+    "normalize": {
+     "maliyet": null,
+     "durus": null,
+     "co2": null,
+     "risk": null
+    },
+    "agirlikli_skor": 0.801,
+    "sira": 3,
+    "oneri": null
+   },
+   {
+    "strateji_kodu": "S1-KUC",
+    "strateji_adi": "Kısmi uçak",
+    "uygun_mu": true,
+    "durus_gun": 0,
+    "maliyet_kalemleri": {
+     "durus": 0,
+     "ceza": 0,
+     "lojistik": 137187,
+     "ek_malzeme": 0,
+     "test": 0,
+     "stok_tasima": 0
+    },
+    "toplam_maliyet_try": 137187,
+    "co2_kg": 1900,
+    "risk": 2.0,
+    "normalize": {
+     "maliyet": null,
+     "durus": null,
+     "co2": null,
+     "risk": null
+    },
+    "agirlikli_skor": 0.912,
+    "sira": 2,
+    "oneri": null
+   },
+   {
+    "strateji_kodu": "S1-UCK",
+    "strateji_adi": "Tamamı uçak",
+    "uygun_mu": true,
+    "durus_gun": 0,
+    "maliyet_kalemleri": {
+     "durus": 0,
+     "ceza": 0,
+     "lojistik": 350075,
+     "ek_malzeme": 0,
+     "test": 0,
+     "stok_tasima": 0
+    },
+    "toplam_maliyet_try": 350075,
+    "co2_kg": 7100,
+    "risk": 2.0,
+    "normalize": {
+     "maliyet": null,
+     "durus": null,
+     "co2": null,
+     "risk": null
+    },
+    "agirlikli_skor": 0.784,
+    "sira": 4,
+    "oneri": null
+   },
+   {
+    "strateji_kodu": "S1-MER",
+    "strateji_adi": "Mersin'e liman değişikliği",
+    "uygun_mu": true,
+    "durus_gun": 4.11,
+    "maliyet_kalemleri": {
+     "durus": 1900000,
+     "ceza": 350000,
+     "lojistik": 95514,
+     "ek_malzeme": 0,
+     "test": 0,
+     "stok_tasima": 0
+    },
+    "toplam_maliyet_try": 2345514,
+    "co2_kg": 900,
+    "risk": 3.0,
+    "normalize": {
+     "maliyet": null,
+     "durus": null,
+     "co2": null,
+     "risk": null
+    },
+    "agirlikli_skor": 0.402,
+    "sira": 5,
+    "oneri": null
+   },
+   {
+    "strateji_kodu": "S1-HIB",
+    "strateji_adi": "Depodan 260 kg + Zhejiang'dan uçakla 250 kg",
+    "uygun_mu": true,
+    "durus_gun": 0,
+    "maliyet_kalemleri": {
+     "durus": 0,
+     "ceza": 0,
+     "lojistik": 109567,
+     "ek_malzeme": 0,
+     "test": 0,
+     "stok_tasima": 0
+    },
+    "toplam_maliyet_try": 109567,
+    "co2_kg": 1240,
+    "risk": 2.0,
+    "normalize": {
+     "maliyet": null,
+     "durus": null,
+     "co2": null,
+     "risk": null
+    },
+    "agirlikli_skor": 0.958,
+    "sira": 1,
+    "oneri": "ÖNERİLEN"
+   }
+  ],
+  "milp": {
+   "durum": "OPTIMAL",
+   "x_T": 260,
+   "x_A": 250,
+   "y_C": 0,
+   "amac_try": 108745,
+   "cckv_ile_uyumlu": true
+  },
+  "oneri_karti": {
+   "baslik": "Depodan 260 kg transfer + Zhejiang'dan uçakla 250 kg",
+   "gerekce": "Hibrit strateji duruşu 5,11 günden 0 güne indiriyor; toplam maliyet 109.567 TL ile aksiyonsuz maliyet olan 2.741.018 TL'ye göre 2.631.451 TL tasarruf sağlıyor.",
+   "dikkat_notu": null,
+   "onerilen_strateji_kodu": "S1-HIB",
+   "rakamlar": {
+    "durus_gun": 0,
+    "toplam_maliyet_try": 109567,
+    "aksiyonsuz_maliyet_try": 2741018,
+    "tasarruf_try": 2631451
+   },
+   "butonlar": [
+    "Onayla",
+    "Reddet",
+    "Değiştir"
+   ]
+  },
+  "karar_kaydi_taslagi": {
+   "olay_no": "NXS-26-025",
+   "karar": "Onay Bekliyor",
+   "tasarruf_try": 2631451,
+   "oneri_zamani": "2026-11-25T09:22:48+03:00"
+  },
+  "what_if_karsilastirma": null
+ }
+}

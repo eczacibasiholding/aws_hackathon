@@ -37,7 +37,9 @@ s3 = boto3.client("s3")
 
 # ---------- PII temizliği ----------
 EPOSTA_RE = re.compile(r"[\w.+-]+@[\w-]+(\.[\w-]+)+")
-TELEFON_RE = re.compile(r"(?<![\w-])\+?\d[\d\s().-]{7,}\d(?![\w-])")
+TELEFON_RE = re.compile(
+    r"(?<![\w-])(\+\d[\d\s().-]{7,}\d|\(?0\d{3}\)?[\s.-]\d{3}[\s.-]\d{2}[\s.-]\d{2})(?![\w-])"
+)
 IMZA_BASLANGIC = re.compile(
     r"^\s*(--\s*$|best regards|kind regards|regards,?$|saygılarımla|saygilarimla|iyi çalışmalar|thanks,?$|sent from my)",
     re.IGNORECASE,
@@ -68,17 +70,27 @@ def normalize(metin: str) -> str:
 
 
 # ---------- MIME ----------
+MIME_BASLIK_RE = re.compile(rb"^(from|to|date|subject|mime-version|content-type|received|return-path|message-id):", re.I | re.M)
+
+
+def _parca_metni(parca) -> str:
+    veri = parca.get_payload(decode=True) or b""
+    charset = parca.get_content_charset()
+    for cs in ([charset] if charset else []) + ["utf-8", "cp1254", "latin-1"]:
+        try:
+            return veri.decode(cs)
+        except (LookupError, UnicodeDecodeError):
+            continue
+    return veri.decode("utf-8", errors="replace")
+
+
 def mime_ayristir(ham: bytes) -> dict:
+    ust = ham.split(b"\n\n", 1)[0] if b"\n\n" in ham else ham[:2000]
+    if not MIME_BASLIK_RE.search(ust):  # başlıksız düz metin (yedek tetik)
+        return {"govde": ham.decode("utf-8", errors="replace"), "tarih": None, "gonderen_alan": None}
     msg = email.message_from_bytes(ham, policy=policy.default)
-    govde = ""
-    if msg.is_multipart():
-        parca = msg.get_body(preferencelist=("plain", "html"))
-        if parca is not None:
-            govde = parca.get_content()
-    elif msg.get_content_type() in ("text/plain", "text/html") and (msg.keys() or msg.get_payload()):
-        govde = msg.get_content()
-    if not msg.keys():  # başlıksız düz metin (yedek tetik)
-        govde = ham.decode("utf-8", errors="replace")
+    parca = msg.get_body(preferencelist=("plain", "html")) if msg.is_multipart() else msg
+    govde = _parca_metni(parca) if parca is not None else ""
     if "<html" in govde.lower():
         govde = re.sub(r"<[^>]+>", " ", govde)
     tarih = None
@@ -161,9 +173,9 @@ def _yeni_sinyal_no(girdi: list[dict]) -> str:
 def sinyal_kaydi_uret(temiz: str, mime: dict, olusma: datetime) -> tuple[str, bool, list[dict]]:
     """(sinyal_no, yeni_mi, uyarilar)."""
     girdi = _girdi_sinyalleri()
-    hedef = normalize(temiz)
+    adaylar = {normalize(temiz), normalize(mime.get("govde", ""))} - {""}
     for r in girdi:
-        if normalize(str(r.get(HAM_METIN_SUTUN) or "")) == hedef and hedef:
+        if normalize(str(r.get(HAM_METIN_SUTUN) or "")) in adaylar:
             return str(r["Sinyal No"]), False, []
     uyarilar = []
     kaynak_kodu = _kaynak_eslemesi().get(mime.get("gonderen_alan") or "")

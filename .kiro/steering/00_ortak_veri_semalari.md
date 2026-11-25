@@ -64,7 +64,7 @@ fileMatchPattern: "src/**"
 | Takip No | `^[A-Z0-9]+-[A-Z0-9]+-26-\d{4}$` | `AKH-MUN-26-1184` |
 | PO | `^45002\d{5}$` (**string**) | `4500201290` |
 | Rota | `^R-(SEA\|AIR\|TRK\|COD\|CST\|EXP\|RAIL)-.+$` | `R-AIR-…` |
-| Müşteri siparişi | `^SO-26-5\d{3}$` | `SO-26-5xxx` |
+| Müşteri siparişi | `^SO-26-\d{4}$` | `SO-26-5xxx` |
 | Risk | `^R-\d{2}$` | `R-01` |
 | Strateji | `^S[1-3]-[A-Z0-9-]+$` | `S1-HIB`, `S2-HIB-A` |
 | Karar | `^NXS-26-0\d{2}$` | `NXS-26-0xx` |
@@ -113,7 +113,7 @@ TarafNo       = _id(r"^(TD5\d{3}|TS0[1-9])$")
 SinyalNo      = _id(r"^SG-26(10|11)-0\d{2}H?$")
 SevkiyatNo    = _id(r"^SV-26-\d{4}$")
 RotaKodu      = _id(r"^R-(SEA|AIR|TRK|COD|CST|EXP|RAIL)-.+$")
-SiparisNo     = _id(r"^SO-26-5\d{3}$")
+SiparisNo     = _id(r"^SO-26-\d{4}$")
 RiskNo        = _id(r"^R-\d{2}$")
 StratejiKodu  = _id(r"^S[1-3]-[A-Z0-9-]+$")
 KararNo       = _id(r"^NXS-26-0\d{2}$")

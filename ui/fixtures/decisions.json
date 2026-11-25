@@ -1,0 +1,25 @@
+{
+ "decisions": [
+  {
+   "olay_no": "NXS-26-025",
+   "risk_no": "R-01",
+   "sinyal_nolari": [
+    "SG-2611-001",
+    "SG-2611-002"
+   ],
+   "karar": "Onay Bekliyor",
+   "onerilen_strateji_kodu": "S1-HIB",
+   "onerilen_aksiyon": "Depodan 260 kg + Zhejiang'dan uçakla 250 kg",
+   "aksiyonsuz_maliyet_try": 2741018,
+   "onerilen_maliyet_try": 109567,
+   "tasarruf_try": 2631451,
+   "onlenen_durus_gun": 5.11,
+   "kurulus_kodu": "SAGLIK",
+   "olay_tipi": "Birleşik (Tedarik + Lojistik)",
+   "yanlis_alarm_mi": false,
+   "risk_gerceklesmeden_aksiyon": true,
+   "kullanici_geri_bildirimi": "Yetkili onayı bekleniyor.",
+   "run_id": "run-20261125-0921-s1"
+  }
+ ]
+}

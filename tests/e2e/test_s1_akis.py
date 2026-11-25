@@ -14,6 +14,13 @@ def akis(tmp_path, monkeypatch):
     monkeypatch.setenv("NEXUS_LLM", "off")
     monkeypatch.delenv("NEXUS_BUCKET", raising=False)
     from src.orchestrator import orchestrator
+    # Bedrock bu ortamda yok: Risk'in LLM bileşeni (dış koşul) testte cevap anahtarından verilir (SCOPE §7.1).
+    from src.agents.risk import agent as risk
+    from tests.unit.risk.test_risk_agent import ANSWER, _dk
+    exp = pd.read_excel(ANSWER, sheet_name="Risk_Skorlama").set_index("Risk No")
+    dk = lambda sig: _dk(exp, "R-01")  # S1 = cevap anahtarında R-01
+    gercek = risk.run
+    monkeypatch.setattr(risk, "run", lambda data, sig, imps, run_id, **kw: gercek(data, sig, imps, run_id, dis_kosul=dk(sig), **kw))
     return orchestrator
 
 
