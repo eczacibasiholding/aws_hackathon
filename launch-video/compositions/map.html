@@ -1,0 +1,277 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #06111d;
+      font-family: "NX Sans", sans-serif;
+      color: #dce8f5;
+    }
+    #mp-stage {
+      position: absolute;
+      inset: 0;
+    }
+    #mp-cam {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3840px;
+      height: 2629px;
+      transform-origin: 0 0;
+    }
+    #mp-land,
+    #mp-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3840px;
+      height: 2629px;
+    }
+    #mp-svg text {
+      font-family: "NX Sans", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    #mp-panelclip {
+      position: absolute;
+      inset: 0;
+    }
+    #mp-panel {
+      position: absolute;
+      left: 1330px;
+      top: 196px;
+      width: 500px;
+      padding: 34px 40px 38px;
+      background: rgba(8, 20, 33, 0.93);
+      border: 2px solid #1c3954;
+      border-radius: 18px;
+    }
+    .mp-row {
+      margin-bottom: 26px;
+    }
+    .mp-lab {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #8ba3bc;
+    }
+    .mp-val {
+      font-size: 58px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.12;
+      font-variant-numeric: tabular-nums;
+    }
+    .amber {
+      color: #f59e0b;
+    }
+    .red {
+      color: #ef4444;
+    }
+    #mp-rule {
+      height: 2px;
+      background: #1c3954;
+      margin: 6px 0 26px;
+      transform-origin: left center;
+    }
+    #mp-cost {
+      font-size: 64px;
+    }
+    #mp-shipclip {
+      position: absolute;
+      inset: 0;
+    }
+    #mp-shiplabel {
+      position: absolute;
+      left: 470px;
+      top: 742px;
+      padding: 14px 20px;
+      background: rgba(8, 20, 33, 0.9);
+      border-left: 4px solid #ef4444;
+      border-radius: 6px;
+    }
+    #mp-shipname {
+      font-family: "NX Mono", monospace;
+      font-weight: 700;
+      font-size: 28px;
+    }
+    #mp-shipstate {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ef4444;
+    }
+    #mp-darkclip {
+      position: absolute;
+      inset: 0;
+    }
+    #mp-dark {
+      position: absolute;
+      inset: 0;
+      background: #000;
+    }
+  </style>
+  <div id="root" data-composition-id="map" data-width="1920" data-height="1080">
+    <div id="mp-stage" class="clip" data-start="0" data-duration="5.5" data-layout-allow-overflow>
+      <div id="mp-cam">
+        <img id="mp-land" src="assets/map/land.svg" alt="" />
+        <svg id="mp-svg" viewBox="0 0 3840 2629" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <mask id="mp-rest-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="3840" height="2629">
+              <path id="mp-rest-reveal" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" />
+            </mask>
+          </defs>
+          <text id="mp-redsea" font-size="36" fill="#4fb3e8" opacity="0.75">KIZILDENİZ</text>
+          <path id="mp-rest" fill="none" stroke="#8ba3bc" stroke-width="5" stroke-dasharray="16 13" stroke-linecap="round" opacity="0.7" mask="url(#mp-rest-mask)" />
+          <path id="mp-route-glow" fill="none" stroke="#4fb3e8" stroke-width="18" stroke-linecap="round" opacity="0.22" />
+          <path id="mp-route" fill="none" stroke="#4fb3e8" stroke-width="6" stroke-linecap="round" />
+          <circle id="mp-port-a" r="9" fill="#4fb3e8" />
+          <circle id="mp-port-b" r="9" fill="#8ba3bc" />
+          <text id="mp-t-mundra" font-size="35" fill="#dce8f5" text-anchor="end">MUNDRA</text>
+          <text id="mp-t-cidde" font-size="35" fill="#dce8f5">CİDDE</text>
+          <text id="mp-t-ambarli" font-size="35" fill="#dce8f5">AMBARLI</text>
+          <circle id="mp-pulse-1" r="14" fill="none" stroke="#ef4444" stroke-width="4" />
+          <circle id="mp-pulse-2" r="14" fill="none" stroke="#ef4444" stroke-width="4" />
+          <circle id="mp-ship" r="13" fill="#dce8f5" stroke="#06111d" stroke-width="4" />
+        </svg>
+      </div>
+    </div>
+
+    <div id="mp-shipclip" class="clip" data-start="1.7" data-duration="3.8">
+      <div id="mp-shiplabel">
+        <div id="mp-shipname">MV AEGEAN STAR</div>
+        <div id="mp-shipstate">Cidde'de bekliyor</div>
+      </div>
+    </div>
+
+    <div id="mp-panelclip" class="clip" data-start="2.4" data-duration="3.1">
+      <div id="mp-panel">
+        <div class="mp-row" id="mp-r1"><div class="mp-lab">STOK BİTİYOR</div><div class="mp-val amber">4 Aralık</div></div>
+        <div class="mp-row" id="mp-r2"><div class="mp-lab">MALZEME GELİYOR</div><div class="mp-val amber">10 Aralık</div></div>
+        <div class="mp-row" id="mp-r3"><div class="mp-lab">HAT DURUŞU</div><div class="mp-val red">5,1 gün</div></div>
+        <div id="mp-rule"></div>
+        <div class="mp-row" id="mp-r4" style="margin-bottom: 0"><div class="mp-lab">AKSİYONSUZ MALİYET</div><div class="mp-val red" id="mp-cost">0 ₺</div></div>
+      </div>
+    </div>
+
+    <div id="mp-darkclip" class="clip" data-start="4.9" data-duration="0.6">
+      <div id="mp-dark"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      // Mercator, same constants as tools/build_map.py (land.svg).
+      const K = 1692.4292, LON0 = 10, R = Math.PI / 180;
+      const Y = (lat) => Math.log(Math.tan(Math.PI / 4 + (lat * R) / 2));
+      const YTOP = Y(64);
+      const proj = (lon, lat) => [(lon - LON0) * R * K, (YTOP - Y(lat)) * K];
+      // Smooth polyline -> cubic Bézier path (Catmull-Rom).
+      const smooth = (pts) => {
+        const p = pts.map(([lo, la]) => proj(lo, la));
+        let d = "M" + p[0][0].toFixed(1) + " " + p[0][1].toFixed(1);
+        for (let i = 0; i < p.length - 1; i++) {
+          const p0 = p[Math.max(0, i - 1)], p1 = p[i], p2 = p[i + 1], p3 = p[Math.min(p.length - 1, i + 2)];
+          const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+          const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+          d += "C" + [c1, c2, p2].map((q) => q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" ");
+        }
+        return d;
+      };
+      // Camera: put geo point (lon, lat) at screen (sx, sy) with scale s.
+      const camAt = (lon, lat, sx, sy, s) => {
+        const [px, py] = proj(lon, lat);
+        return { x: sx - px * s, y: sy - py * s, scale: s };
+      };
+
+      const MUNDRA = [69.7, 22.74], JEDDAH = [39.17, 21.49], AMBARLI = [28.68, 40.97];
+      const sailed = [MUNDRA, [68.0, 22.0], [64.0, 19.5], [58.5, 15.5], [52.0, 13.2], [46.0, 12.2], [43.5, 12.65], [42.0, 14.8], [40.6, 17.8], JEDDAH];
+      const planned = [JEDDAH, [37.7, 24.0], [35.4, 27.0], [33.6, 28.6], [32.55, 29.95], [32.35, 31.25], [30.0, 32.8], [27.6, 34.6], [26.0, 36.9], [25.9, 38.6], [26.2, 40.0], [27.2, 40.55], AMBARLI];
+
+      const route = document.getElementById("mp-route");
+      const dRoute = smooth(sailed);
+      route.setAttribute("d", dRoute);
+      document.getElementById("mp-route-glow").setAttribute("d", dRoute);
+      const dRest = smooth(planned);
+      document.getElementById("mp-rest").setAttribute("d", dRest);
+      document.getElementById("mp-rest-reveal").setAttribute("d", dRest);
+
+      const place = (id, lonlat, dx, dy) => {
+        const [x, y] = proj(lonlat[0], lonlat[1]);
+        const el = document.getElementById(id);
+        if (el.tagName === "circle") {
+          el.setAttribute("cx", x + dx);
+          el.setAttribute("cy", y + dy);
+        } else {
+          el.setAttribute("x", x + dx);
+          el.setAttribute("y", y + dy);
+        }
+      };
+      place("mp-port-a", MUNDRA, 0, 0);
+      place("mp-port-b", AMBARLI, 0, 0);
+      place("mp-t-mundra", MUNDRA, -22, -18);
+      place("mp-t-cidde", JEDDAH, 26, -20);
+      place("mp-t-ambarli", AMBARLI, 20, -14);
+      place("mp-pulse-1", JEDDAH, 0, 0);
+      place("mp-pulse-2", JEDDAH, 0, 0);
+      place("mp-ship", MUNDRA, 0, 0);
+      const rs = proj(33.0, 22.6);
+      const redsea = document.getElementById("mp-redsea");
+      redsea.setAttribute("x", rs[0]);
+      redsea.setAttribute("y", rs[1]);
+      redsea.setAttribute("transform", "rotate(-57 " + rs[0] + " " + rs[1] + ")");
+
+      const L = route.getTotalLength();
+      const LR = document.getElementById("mp-rest-reveal").getTotalLength();
+      const ship = document.getElementById("mp-ship");
+      const shipAt = (f) => {
+        const pt = route.getPointAtLength(L * f);
+        ship.setAttribute("cx", pt.x);
+        ship.setAttribute("cy", pt.y);
+      };
+
+      const tl = gsap.timeline({ paused: true });
+
+      // Arrival: the dive through "Red Sea" lands here and settles on the whole corridor.
+      const camA = camAt(28, 41, 150, 120, 0.85);
+      const rsA = proj(38.5, 20);
+      const sIn = 0.85 * 1.45;
+      tl.fromTo("#mp-cam", { x: 815 - rsA[0] * sIn, y: 596 - rsA[1] * sIn, scale: sIn, filter: "blur(10px)" }, { x: camA.x, y: camA.y, scale: camA.scale, filter: "blur(0px)", duration: 0.75, ease: "expo.out" }, 0);
+
+      // The voyage draws from Mundra; the ship rides its tip and halts at Jeddah.
+      tl.fromTo([route, "#mp-route-glow"], { strokeDasharray: L + " " + L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.35, ease: "power1.in" }, 0.25);
+      const prog = { f: 0 };
+      tl.fromTo(prog, { f: 0 }, { f: 1, duration: 1.35, ease: "power1.in", onUpdate: () => shipAt(prog.f) }, 0.25);
+      tl.fromTo("#mp-t-mundra", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.3);
+      tl.fromTo("#mp-redsea", { opacity: 0 }, { opacity: 0.75, duration: 0.3 }, 0.6);
+      tl.fromTo("#mp-t-cidde", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 1.5);
+
+      // 1.60 the stall: ship turns red, two alarm rings.
+      tl.fromTo(ship, { attr: { fill: "#dce8f5", r: 13 } }, { attr: { fill: "#ef4444", r: 17 }, duration: 0.12, ease: "power2.out" }, 1.6);
+      gsap.set(["#mp-pulse-1", "#mp-pulse-2"], { opacity: 0 });
+      tl.fromTo("#mp-pulse-1", { attr: { r: 14 }, opacity: 0.9 }, { attr: { r: 90 }, opacity: 0, duration: 0.9, ease: "power2.out", immediateRender: false }, 1.6);
+      tl.fromTo("#mp-pulse-2", { attr: { r: 14 }, opacity: 0.9 }, { attr: { r: 90 }, opacity: 0, duration: 0.9, ease: "power2.out", immediateRender: false }, 2.1);
+      tl.fromTo("#mp-shiplabel", { opacity: 0, x: -24, filter: "blur(6px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.3, ease: "expo.out" }, 1.7);
+
+      // 1.90 what was planned: the rest of the way to Ambarli, now out of reach.
+      tl.fromTo("#mp-rest-reveal", { strokeDasharray: LR + " " + LR, strokeDashoffset: LR }, { strokeDashoffset: 0, duration: 0.7, ease: "power2.inOut" }, 1.9);
+      tl.fromTo(["#mp-port-b", "#mp-t-ambarli"], { opacity: 0 }, { opacity: 1, duration: 0.2 }, 2.45);
+
+      // Panel: the numbers land on the beat (film 7.0, 7.5, 8.0, 8.5).
+      tl.fromTo("#mp-panel", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power3.out" }, 2.4);
+      [["#mp-r1", 2.5], ["#mp-r2", 3.0], ["#mp-r3", 3.5], ["#mp-r4", 4.0]].forEach(([sel, at]) => {
+        tl.fromTo(sel + " .mp-lab", { opacity: 0 }, { opacity: 1, duration: 0.12 }, at - 0.08);
+        tl.fromTo(sel + " .mp-val", { opacity: 0, scale: 1.18, filter: "blur(6px)", transformOrigin: "0% 50%" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.25, ease: "expo.out" }, at);
+      });
+      tl.fromTo("#mp-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power3.out" }, 3.75);
+      const cost = { v: 0 };
+      const costEl = document.getElementById("mp-cost");
+      const fmt = (n) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " ₺";
+      tl.fromTo(cost, { v: 0 }, { v: 2741018, duration: 0.8, ease: "expo.out", onUpdate: () => { costEl.textContent = fmt(cost.v); } }, 4.0);
+
+      // 4.90 -> 5.25: dip to black, then silence until the reveal.
+      tl.fromTo("#mp-dark", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.in" }, 4.9);
+
+      window.__timelines["map"] = tl;
+    })();
+  </script>
+</template>

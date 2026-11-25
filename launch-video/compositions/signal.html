@@ -1,0 +1,162 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 50% 55%, #0b1e31 0%, #06111d 62%);
+      font-family: "NX Sans", sans-serif;
+      color: #dce8f5;
+    }
+    #sg-headline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 150px;
+      text-align: center;
+      font-size: 76px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    #sg-headline .w {
+      display: inline-block;
+      margin: 0 0.12em;
+    }
+    #sg-headline .red {
+      color: #ef4444;
+    }
+    #sg-cardclip {
+      position: absolute;
+      inset: 0;
+    }
+    #sg-card {
+      position: absolute;
+      left: 260px;
+      top: 360px;
+      width: 1400px;
+      padding: 48px 60px 52px;
+      background: rgba(8, 20, 33, 0.93);
+      border: 2px solid #1c3954;
+      border-radius: 18px;
+      transform-origin: 555px 236px;
+      font-family: "NX Mono", monospace;
+    }
+    #sg-head {
+      display: flex;
+      justify-content: space-between;
+      height: 40px;
+      margin-bottom: 28px;
+      font-size: 28px;
+      letter-spacing: 0.02em;
+    }
+    #sg-src {
+      color: #4fb3e8;
+      font-weight: 700;
+    }
+    #sg-time {
+      color: #8ba3bc;
+    }
+    .sg-line {
+      height: 48px;
+      font-size: 30px;
+      line-height: 48px;
+      white-space: pre;
+      color: #dce8f5;
+    }
+    .sg-line .dim {
+      color: #8ba3bc;
+    }
+    #sg-eta,
+    #sg-redsea {
+      position: relative;
+      display: inline-block;
+      isolation: isolate;
+    }
+    #sg-eta-bg {
+      position: absolute;
+      left: -8px;
+      right: -8px;
+      top: 4px;
+      bottom: 4px;
+      background: #ef4444;
+      border-radius: 6px;
+      transform-origin: left center;
+      z-index: -1;
+    }
+    #sg-eta-txt {
+      position: relative;
+      font-weight: 700;
+    }
+    #sg-redsea-ul {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 2px;
+      height: 4px;
+      background: #4fb3e8;
+      transform-origin: left center;
+    }
+  </style>
+  <div id="root" data-composition-id="signal" data-width="1920" data-height="1080">
+    <h1 id="sg-headline" class="clip" data-start="2.45" data-duration="1.55">
+      <span class="w">Kızıldeniz'de</span><span class="w">gemi</span><span class="w red">8 gün</span><span class="w">gecikti.</span>
+    </h1>
+
+    <div id="sg-cardclip" class="clip" data-start="0" data-duration="4.5" data-layout-allow-overflow>
+    <div id="sg-card">
+      <div id="sg-head">
+        <span id="sg-src">KY02 · Taşıyıcı bildirimi</span>
+        <span id="sg-time">24.11.2026 · 09:12</span>
+      </div>
+      <div class="sg-line" id="sg-l1">CUSTOMER ADVISORY – AKH Feeder Services</div>
+      <div class="sg-line" id="sg-l2">Due to continued congestion at Jeddah Islamic Port</div>
+      <div class="sg-line" id="sg-l3">and knock-on effects of <span id="sg-redsea">Red Sea<span id="sg-redsea-ul"></span></span> diversions,</div>
+      <div class="sg-line" id="sg-l4">connecting vessel MV AEGEAN STAR has been re-scheduled.</div>
+      <div class="sg-line" id="sg-l5">Revised ETA Ambarli: <span id="sg-eta"><span id="sg-eta-bg"></span><span id="sg-eta-txt">05-Dec-2026</span></span> <span class="dim">(previous: 27-Nov-2026)</span></div>
+    </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      // Card arrives: line blur-in, no slide.
+
+      // Lines type in (stepped reveal reads as characters arriving).
+      const lines = [
+        ["#sg-l1", 0.32, 0.26, 39],
+        ["#sg-l2", 0.58, 0.3, 50],
+        ["#sg-l3", 0.88, 0.26, 43],
+        ["#sg-l4", 1.14, 0.34, 56],
+        ["#sg-l5", 1.48, 0.34, 57],
+      ];
+      lines.forEach(([sel, at, dur, chars]) => {
+        tl.fromTo(sel, { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: dur, ease: "steps(" + chars + ")" }, at);
+      });
+      gsap.set(["#sg-eta-bg", "#sg-redsea-ul"], { scaleX: 0 });
+
+      // 2.30: the new ETA slams red; everything else steps back.
+      tl.fromTo("#sg-eta-bg", { scaleX: 0 }, { scaleX: 1, duration: 0.12, ease: "expo.out" }, 2.3);
+      tl.fromTo("#sg-eta-txt", { color: "#dce8f5" }, { color: "#ffffff", duration: 0.05 }, 2.3);
+      tl.fromTo(["#sg-l1", "#sg-l2", "#sg-l4", "#sg-head"], { opacity: 1 }, { opacity: 0.4, duration: 0.2, ease: "power2.out" }, 2.32);
+      // impact shake, three frames
+      tl.to("#sg-card", { keyframes: [{ x: 14, duration: 0.033, ease: "none" }, { x: -10, duration: 0.033, ease: "none" }, { x: 6, duration: 0.033, ease: "none" }, { x: 0, duration: 0.05, ease: "power2.out" }] }, 2.3);
+
+      // 2.45: the Turkish headline, word by word from blur.
+      tl.fromTo("#sg-headline .w", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.15, ease: "power3.out", stagger: 0.08 }, 2.45);
+
+      // 3.50: "Red Sea" lights up: the way into the map.
+      tl.fromTo("#sg-redsea", { color: "#dce8f5" }, { color: "#4fb3e8", duration: 0.15 }, 3.5);
+      tl.fromTo("#sg-redsea-ul", { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: "power3.out" }, 3.5);
+
+      // Headline leaves first (blur-out), then the camera dives through "Red Sea".
+      tl.to("#sg-headline .w", { opacity: 0, filter: "blur(8px)", duration: 0.16, ease: "power2.in", stagger: 0.03 }, 3.72);
+      tl.fromTo("#sg-card", { scale: 1 }, { scale: 7, duration: 0.6, ease: "power3.in", immediateRender: false }, 3.9);
+      tl.fromTo("#sg-card", { filter: "blur(0px)" }, { filter: "blur(10px)", duration: 0.3, ease: "power2.in" }, 4.2);
+      tl.fromTo("#sg-card", { opacity: 1 }, { opacity: 0, duration: 0.14, ease: "power2.in" }, 4.33);
+
+      window.__timelines["signal"] = tl;
+    })();
+  </script>
+</template>

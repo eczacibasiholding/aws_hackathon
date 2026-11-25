@@ -1,0 +1,239 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #06111d;
+      font-family: "NX Sans", sans-serif;
+      color: #dce8f5;
+    }
+    #dc-stage {
+      position: absolute;
+      inset: 0;
+    }
+    #dc-inner,
+    #dc-world {
+      position: absolute;
+      inset: 0;
+    }
+    #dc-cam {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3840px;
+      height: 2629px;
+      transform-origin: 0 0;
+    }
+    #dc-land,
+    #dc-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3840px;
+      height: 2629px;
+    }
+    #dc-svg text {
+      font-family: "NX Sans", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .dc-chip {
+      position: absolute;
+      padding: 14px 22px 16px;
+      background: rgba(8, 20, 33, 0.93);
+      border: 2px solid rgba(34, 197, 94, 0.55);
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+    .dc-chip .k {
+      font-size: 28px;
+      font-weight: 600;
+      color: #8ba3bc;
+      letter-spacing: 0.06em;
+    }
+    .dc-chip .v {
+      font-size: 36px;
+      font-weight: 800;
+      color: #22c55e;
+    }
+    #dc-air {
+      left: 820px;
+      top: 470px;
+    }
+    #dc-depot {
+      left: 250px;
+      top: 470px;
+    }
+    #dc-head {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 860px;
+      text-align: center;
+    }
+    #dc-title {
+      font-size: 84px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+    }
+    #dc-title .w {
+      display: inline-block;
+      margin: 0 0.12em;
+    }
+    #dc-check {
+      display: inline-block;
+      width: 70px;
+      height: 70px;
+      margin-right: 22px;
+      vertical-align: -6px;
+    }
+    #dc-sub {
+      margin-top: 10px;
+      font-size: 34px;
+      font-weight: 500;
+      color: #8ba3bc;
+    }
+  </style>
+  <div id="root" data-composition-id="decision" data-width="1920" data-height="1080">
+    <div id="dc-stage" class="clip" data-start="0" data-duration="3.5" data-layout-allow-overflow data-layout-allow-overlap>
+      <div id="dc-inner">
+      <div id="dc-world">
+        <div id="dc-cam">
+          <img id="dc-land" src="assets/map/land.svg" alt="" />
+          <svg id="dc-svg" viewBox="0 0 3840 2629" xmlns="http://www.w3.org/2000/svg">
+            <path id="dc-old" fill="none" stroke="#ef4444" stroke-width="7" stroke-linecap="round" opacity="0.45" />
+            <path id="dc-old-rest" fill="none" stroke="#8ba3bc" stroke-width="6" stroke-dasharray="18 15" opacity="0.35" />
+            <circle id="dc-ship" r="20" fill="#ef4444" opacity="0.8" />
+            <text id="dc-t-cidde" font-size="52" fill="#ef4444" text-anchor="end" opacity="0.8">CİDDE</text>
+            <path id="dc-air-glow" fill="none" stroke="#22c55e" stroke-width="26" stroke-linecap="round" opacity="0.22" />
+            <path id="dc-air-path" fill="none" stroke="#22c55e" stroke-width="9" stroke-linecap="round" />
+            <circle id="dc-pvg" r="14" fill="#22c55e" />
+            <text id="dc-t-pvg" font-size="54" fill="#dce8f5" text-anchor="end">ŞANGHAY</text>
+            <circle id="dc-plane" r="17" fill="#ffffff" stroke="#22c55e" stroke-width="6" />
+            <circle id="dc-ist" r="14" fill="#22c55e" />
+            <text id="dc-t-ist" font-size="54" fill="#dce8f5">İSTANBUL</text>
+            <circle id="dc-ring-1" r="20" fill="none" stroke="#22c55e" stroke-width="6" />
+            <circle id="dc-ring-2" r="20" fill="none" stroke="#22c55e" stroke-width="6" />
+          </svg>
+        </div>
+        <div class="dc-chip" id="dc-air"><div class="k">ZHEJİANG → İSTANBUL</div><div class="v">Uçakla 250 kg · 2 gün</div></div>
+        <div class="dc-chip" id="dc-depot"><div class="k">ESENYURT DEPO → ÇERKEZKÖY</div><div class="v">260 kg · 1 gün</div></div>
+      </div>
+      <div id="dc-head">
+        <div id="dc-title">
+          <svg id="dc-check" viewBox="0 0 70 70"><circle cx="35" cy="35" r="33" fill="#22c55e" /><path id="dc-tick" d="M19 36 L30 47 L52 24" fill="none" stroke="#06111d" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" /></svg><span class="w">Hat</span><span class="w">durmuyor.</span>
+        </div>
+        <div id="dc-sub">Malzeme 4 Aralık'tan önce fabrikada.</div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const K = 1692.4292, LON0 = 10, R = Math.PI / 180;
+      const Y = (lat) => Math.log(Math.tan(Math.PI / 4 + (lat * R) / 2));
+      const YTOP = Y(64);
+      const proj = (lon, lat) => [(lon - LON0) * R * K, (YTOP - Y(lat)) * K];
+      const smooth = (pts) => {
+        const p = pts.map(([lo, la]) => proj(lo, la));
+        let d = "M" + p[0][0].toFixed(1) + " " + p[0][1].toFixed(1);
+        for (let i = 0; i < p.length - 1; i++) {
+          const p0 = p[Math.max(0, i - 1)], p1 = p[i], p2 = p[i + 1], p3 = p[Math.min(p.length - 1, i + 2)];
+          const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+          const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+          d += "C" + [c1, c2, p2].map((q) => q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" ");
+        }
+        return d;
+      };
+      const camAt = (lon, lat, sx, sy, s) => {
+        const [px, py] = proj(lon, lat);
+        return { x: sx - px * s, y: sy - py * s, scale: s };
+      };
+      // Great circle between two points, sampled.
+      const greatCircle = (a, b, n) => {
+        const v = ([lo, la]) => [Math.cos(la * R) * Math.cos(lo * R), Math.cos(la * R) * Math.sin(lo * R), Math.sin(la * R)];
+        const A = v(a), B = v(b);
+        const w = Math.acos(A[0] * B[0] + A[1] * B[1] + A[2] * B[2]);
+        const out = [];
+        for (let i = 0; i <= n; i++) {
+          const t = i / n;
+          const ka = Math.sin((1 - t) * w) / Math.sin(w), kb = Math.sin(t * w) / Math.sin(w);
+          const x = ka * A[0] + kb * B[0], y = ka * A[1] + kb * B[1], z = ka * A[2] + kb * B[2];
+          out.push([Math.atan2(y, x) / R, Math.atan2(z, Math.hypot(x, y)) / R]);
+        }
+        return out;
+      };
+
+      const MUNDRA = [69.7, 22.74], JEDDAH = [39.17, 21.49], AMBARLI = [28.68, 40.97];
+      const PVG = [121.8, 31.14], IST = [28.73, 41.26];
+      const sailed = [MUNDRA, [68.0, 22.0], [64.0, 19.5], [58.5, 15.5], [52.0, 13.2], [46.0, 12.2], [43.5, 12.65], [42.0, 14.8], [40.6, 17.8], JEDDAH];
+      const planned = [JEDDAH, [37.7, 24.0], [35.4, 27.0], [33.6, 28.6], [32.55, 29.95], [32.35, 31.25], [30.0, 32.8], [27.6, 34.6], [26.0, 36.9], [25.9, 38.6], [26.2, 40.0], [27.2, 40.55], AMBARLI];
+      document.getElementById("dc-old").setAttribute("d", smooth(sailed));
+      document.getElementById("dc-old-rest").setAttribute("d", smooth(planned));
+
+      const airPts = greatCircle(PVG, IST, 48).map(([lo, la]) => proj(lo, la));
+      const dAir = "M" + airPts.map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join("L");
+      const air = document.getElementById("dc-air-path");
+      air.setAttribute("d", dAir);
+      document.getElementById("dc-air-glow").setAttribute("d", dAir);
+
+      const set = (id, ll, dx, dy) => {
+        const [x, y] = proj(ll[0], ll[1]);
+        const el = document.getElementById(id);
+        el.setAttribute(el.tagName === "circle" ? "cx" : "x", x + dx);
+        el.setAttribute(el.tagName === "circle" ? "cy" : "y", y + dy);
+      };
+      set("dc-ship", JEDDAH, 0, 0);
+      set("dc-t-cidde", JEDDAH, -34, 14);
+      set("dc-pvg", PVG, 0, 0);
+      set("dc-t-pvg", PVG, -30, 64);
+      set("dc-plane", PVG, 0, 0);
+      set("dc-ist", IST, 0, 0);
+      set("dc-t-ist", IST, -40, -40);
+      set("dc-ring-1", IST, 0, 0);
+      set("dc-ring-2", IST, 0, 0);
+
+      const LA = air.getTotalLength();
+      const plane = document.getElementById("dc-plane");
+      const planeAt = (f) => {
+        const pt = air.getPointAtLength(LA * f);
+        plane.setAttribute("cx", pt.x);
+        plane.setAttribute("cy", pt.y);
+      };
+
+      const tl = gsap.timeline({ paused: true });
+
+      // 0.00 out of the KARAR node: the wide map fades up and settles.
+      const camB = camAt(20, 52, 100, 150, 0.5586);
+      const sIn = 0.5586 * 1.18;
+      const [cx, cy] = proj(52, 33);
+      tl.fromTo("#dc-cam", { x: 960 - cx * sIn, y: 540 - cy * sIn, scale: sIn }, { x: camB.x, y: camB.y, scale: camB.scale, duration: 0.7, ease: "expo.out" }, 0);
+      tl.fromTo("#dc-world", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+
+      // 0.30 the alternative supplier: Shanghai -> Istanbul by air.
+      tl.fromTo(["#dc-pvg", "#dc-t-pvg", "#dc-ist", "#dc-t-ist"], { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.05 }, 0.25);
+      tl.fromTo([air, "#dc-air-glow"], { strokeDasharray: LA + " " + LA, strokeDashoffset: LA }, { strokeDashoffset: 0, duration: 1.0, ease: "power2.inOut" }, 0.3);
+      const prog = { f: 0 };
+      tl.fromTo(prog, { f: 0 }, { f: 1, duration: 1.0, ease: "power2.inOut", onUpdate: () => planeAt(prog.f) }, 0.3);
+      tl.fromTo("#dc-air", { opacity: 0, filter: "blur(8px)", scale: 1.08 }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.28, ease: "expo.out" }, 0.95);
+
+      // 1.60 the group's own depot, next door to the plant.
+      gsap.set(["#dc-ring-1", "#dc-ring-2"], { opacity: 0 });
+      tl.fromTo("#dc-ring-1", { attr: { r: 20 }, opacity: 1 }, { attr: { r: 110 }, opacity: 0, duration: 0.8, ease: "power2.out", immediateRender: false }, 1.6);
+      tl.fromTo("#dc-ring-2", { attr: { r: 20 }, opacity: 1 }, { attr: { r: 110 }, opacity: 0, duration: 0.8, ease: "power2.out", immediateRender: false }, 1.85);
+      tl.fromTo("#dc-depot", { opacity: 0, filter: "blur(8px)", scale: 1.08 }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.28, ease: "expo.out" }, 1.6);
+
+      // 2.10 the result.
+      tl.fromTo("#dc-check", { scale: 0, rotation: -30 }, { scale: 1, rotation: 0, duration: 0.35, ease: "back.out(1.6)" }, 1.85);
+      tl.fromTo("#dc-title .w", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.15, ease: "power3.out", stagger: 0.08 }, 1.89);
+      tl.fromTo("#dc-sub", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 2.05);
+
+      // 3.00 the music drops out: hold, then whip left into the payoff at 3.50.
+      tl.to("#dc-inner", { x: -420, filter: "blur(18px)", opacity: 0.2, duration: 0.2, ease: "power3.in" }, 3.3);
+
+      window.__timelines["decision"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,142 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 50% 48%, #0d2338 0%, #06111d 60%);
+      font-family: "NX Sans", sans-serif;
+      color: #dce8f5;
+    }
+    #ec-stage {
+      position: absolute;
+      inset: 0;
+    }
+    #ec-inner {
+      position: absolute;
+      inset: 0;
+    }
+    #ec-line {
+      position: absolute;
+      left: 868px;
+      top: 389px;
+      width: 184px;
+      height: 3px;
+      background: #1c3954;
+      transform-origin: 0 50%;
+    }
+    .ec-dot {
+      position: absolute;
+      top: 380px;
+      width: 20px;
+      height: 20px;
+      margin-left: -10px;
+      border-radius: 50%;
+      background: #4fb3e8;
+    }
+    #ec-d5 {
+      background: #22c55e;
+    }
+    #ec-word {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 428px;
+      text-align: center;
+      font-size: 170px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      padding-left: 0.06em;
+    }
+    #ec-tag {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 640px;
+      text-align: center;
+      font-size: 52px;
+      font-weight: 600;
+    }
+    #ec-tag .w {
+      display: inline-block;
+      margin: 0 0.12em;
+    }
+    #ec-stack {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 800px;
+      text-align: center;
+      font-family: "NX Mono", monospace;
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      color: #8ba3bc;
+    }
+    #ec-flashclip,
+    #ec-blackclip {
+      position: absolute;
+      inset: 0;
+    }
+    #ec-flash {
+      position: absolute;
+      inset: 0;
+      background: #dff1ff;
+    }
+    #ec-black {
+      position: absolute;
+      inset: 0;
+      background: #000;
+    }
+  </style>
+  <div id="root" data-composition-id="endcard" data-width="1920" data-height="1080">
+    <div id="ec-stage" class="clip" data-start="0" data-duration="3.5" data-layout-allow-overflow>
+      <div id="ec-inner">
+        <div id="ec-line"></div>
+        <div class="ec-dot" id="ec-d1" style="left: 868px"></div>
+        <div class="ec-dot" id="ec-d2" style="left: 914px"></div>
+        <div class="ec-dot" id="ec-d3" style="left: 960px"></div>
+        <div class="ec-dot" id="ec-d4" style="left: 1006px"></div>
+        <div class="ec-dot" id="ec-d5" style="left: 1052px"></div>
+        <div id="ec-word">NEXUS</div>
+        <div id="ec-tag"><span class="w" id="ec-w1">Kesintiden</span><span class="w" id="ec-w2">karara.</span></div>
+        <div id="ec-stack">Amazon Bedrock · AgentCore · Strands Agents</div>
+      </div>
+    </div>
+    <div id="ec-flashclip" class="clip" data-start="0.5" data-duration="0.3">
+      <div id="ec-flash"></div>
+    </div>
+    <div id="ec-blackclip" class="clip" data-start="3.05" data-duration="0.45">
+      <div id="ec-black"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      // 0.00 under the snare roll, the five agents rush in from the edges...
+      const from = [-1000, -620, 0, 620, 1000];
+      const fromY = [-260, 300, -420, 280, -200];
+      from.forEach((dx, i) => {
+        tl.fromTo("#ec-d" + (i + 1), { x: dx, y: fromY[i], opacity: 0, scale: 0.6 }, { x: 0, y: 0, opacity: 1, scale: 1, duration: 0.48, ease: "power3.in" }, 0.02);
+      });
+
+      // 0.50 ...and lock into the mark on the final boom (film 27.0).
+      tl.fromTo("#ec-flash", { opacity: 0.8 }, { opacity: 0, duration: 0.25, ease: "power2.out" }, 0.5);
+      tl.fromTo("#ec-line", { scaleX: 0 }, { scaleX: 1, duration: 0.2, ease: "expo.out" }, 0.5);
+      tl.fromTo(".ec-dot", { scale: 1.6 }, { scale: 1, duration: 0.3, ease: "expo.out", immediateRender: false }, 0.5);
+      tl.fromTo("#ec-word", { clipPath: "inset(0% 100% 0% 0%)", filter: "blur(10px)" }, { clipPath: "inset(0% 0% 0% 0%)", filter: "blur(0px)", duration: 0.28, ease: "expo.out" }, 0.52);
+
+      // 0.85 the line, light grey to ink, word by word.
+      tl.fromTo("#ec-tag .w", { opacity: 0 }, { opacity: 1, duration: 0.12, stagger: 0.09 }, 0.85);
+      tl.fromTo("#ec-w1", { color: "#3a5068" }, { color: "#dce8f5", duration: 0.25 }, 0.85);
+      tl.fromTo("#ec-w2", { color: "#3a5068" }, { color: "#4fb3e8", duration: 0.25 }, 0.94);
+      tl.fromTo("#ec-stack", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25 }, 1.3);
+
+      // 3.05 fade to black under the tail.
+      tl.fromTo("#ec-black", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.in" }, 3.05);
+
+      window.__timelines["endcard"] = tl;
+    })();
+  </script>
+</template>

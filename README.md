@@ -116,3 +116,7 @@ Frontend repoya bağımlı değildir; AWS tarafındaki tek repo bağı deploy ro
    ```
    Özel (private) repoda ID'leri okuyabilmek için `GH_TOKEN` ortam değişkeni gerekir. Varsayılan dal `main`'dir, değiştirmek için `BRANCH=...`.
 3. Yeni repoda `main` dalına `frontend/` altında bir değişiklik push et; workflow aynı bucket'a ve aynı HTTPS adresine deploy eder.
+
+## Lansman videosu
+
+`launch-video/` altında sunumu açmak için 30 saniyelik, sesli bir tanıtım filmi var: [`launch-video/nexus-lansman-30sn.mp4`](launch-video/nexus-lansman-30sn.mp4). [HyperFrames](https://github.com/heygen-com/hyperframes) (HTML → video) ile yapıldı. Rakamlar S1 senaryosundan alındı. Ajan kodundan bağımsızdır. Yeniden üretme adımları için: [`launch-video/README.md`](launch-video/README.md).

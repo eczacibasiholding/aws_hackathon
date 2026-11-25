@@ -1,0 +1,118 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 50% 50%, #0d2338 0%, #06111d 60%);
+      font-family: "NX Sans", sans-serif;
+      color: #dce8f5;
+    }
+    #rv-stage {
+      position: absolute;
+      inset: 0;
+    }
+    #rv-line {
+      position: absolute;
+      left: 848px;
+      top: 389px;
+      width: 224px;
+      height: 3px;
+      background: #1c3954;
+      transform-origin: 0 50%;
+    }
+    .rv-dot {
+      position: absolute;
+      top: 379px;
+      width: 22px;
+      height: 22px;
+      margin-left: -11px;
+      border-radius: 50%;
+      background: #4fb3e8;
+    }
+    #rv-d5 {
+      background: #22c55e;
+    }
+    #rv-word {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 430px;
+      text-align: center;
+      font-size: 230px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      padding-left: 0.06em;
+    }
+    #rv-word .ch {
+      display: inline-block;
+    }
+    #rv-tag {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 700px;
+      text-align: center;
+      font-size: 56px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    #rv-tag .w {
+      display: inline-block;
+      margin: 0 0.12em;
+    }
+    #rv-tag .acc {
+      color: #4fb3e8;
+    }
+    #rv-flashclip {
+      position: absolute;
+      inset: 0;
+    }
+    #rv-flash {
+      position: absolute;
+      inset: 0;
+      background: #dff1ff;
+    }
+  </style>
+  <div id="root" data-composition-id="reveal" data-width="1920" data-height="1080">
+    <div id="rv-stage" class="clip" data-start="0" data-duration="2" data-layout-allow-overflow data-layout-allow-overlap>
+      <div id="rv-line"></div>
+      <div class="rv-dot" id="rv-d1" style="left: 848px"></div>
+      <div class="rv-dot" id="rv-d2" style="left: 904px"></div>
+      <div class="rv-dot" id="rv-d3" style="left: 960px"></div>
+      <div class="rv-dot" id="rv-d4" style="left: 1016px"></div>
+      <div class="rv-dot" id="rv-d5" style="left: 1072px"></div>
+      <div id="rv-word"><span class="ch">N</span><span class="ch">E</span><span class="ch">X</span><span class="ch">U</span><span class="ch">S</span></div>
+      <div id="rv-tag"><span class="w">Kesintiden</span><span class="w acc">karara.</span></div>
+    </div>
+    <div id="rv-flashclip" class="clip" data-start="0" data-duration="0.3">
+      <div id="rv-flash"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      // 0.00 the boom: a flash, the five agents snap into a line, the name slams.
+      tl.fromTo("#rv-flash", { opacity: 0.85 }, { opacity: 0, duration: 0.25, ease: "power2.out" }, 0);
+      tl.fromTo(".rv-dot", { scale: 0 }, { scale: 1, duration: 0.3, ease: "expo.out", stagger: 0.035 }, 0.02);
+      tl.fromTo("#rv-line", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "expo.out" }, 0.05);
+      tl.fromTo("#rv-word .ch", { opacity: 0, scale: 1.7, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.32, ease: "expo.out", stagger: 0.035 }, 0);
+
+      // 0.55 the promise, word by word.
+      tl.fromTo("#rv-tag .w", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.15, ease: "power3.out", stagger: 0.1 }, 0.55);
+
+      // 1.45 the name steps back; the five dots carry across to become the five agents.
+      tl.to(["#rv-word .ch", "#rv-tag .w"], { opacity: 0, filter: "blur(10px)", duration: 0.18, ease: "power2.in", stagger: 0.015 }, 1.45);
+      const nodeX = [240, 600, 960, 1320, 1680];
+      const dotX = [848, 904, 960, 1016, 1072];
+      dotX.forEach((x, i) => {
+        tl.to("#rv-d" + (i + 1), { x: nodeX[i] - x, y: 80, scale: 40 / 22, duration: 0.45, ease: "power3.inOut" }, 1.55);
+      });
+      tl.to("#rv-line", { x: 240 - 848, y: 80, scaleX: 1440 / 224, duration: 0.45, ease: "power3.inOut" }, 1.55);
+
+      window.__timelines["reveal"] = tl;
+    })();
+  </script>
+</template>

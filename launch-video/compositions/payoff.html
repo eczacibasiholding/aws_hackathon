@@ -1,0 +1,160 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 50% 62%, #0c2234 0%, #06111d 62%);
+      font-family: "NX Sans", sans-serif;
+      color: #dce8f5;
+    }
+    #po-stage {
+      position: absolute;
+      inset: 0;
+    }
+    #po-inner {
+      position: absolute;
+      inset: 0;
+    }
+    .po-row {
+      position: absolute;
+      left: 200px;
+      width: 1520px;
+    }
+    #po-ra {
+      top: 170px;
+    }
+    #po-rb {
+      top: 320px;
+    }
+    .po-lab {
+      font-size: 30px;
+      font-weight: 600;
+      color: #8ba3bc;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+    .po-barline {
+      position: relative;
+      height: 58px;
+    }
+    .po-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 58px;
+      border-radius: 6px;
+      transform-origin: 0 50%;
+    }
+    #po-bar-a {
+      width: 1160px;
+      background: #ef4444;
+    }
+    #po-bar-b {
+      width: 46px;
+      background: #4fb3e8;
+    }
+    .po-num {
+      position: absolute;
+      top: 2px;
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 54px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    #po-num-a {
+      left: 1190px;
+      color: #ef4444;
+    }
+    #po-num-b {
+      left: 76px;
+      color: #4fb3e8;
+    }
+    #po-hero {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 540px;
+      text-align: center;
+    }
+    #po-hero-lab {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: 0.3em;
+      color: #22c55e;
+      padding-left: 0.3em;
+    }
+    #po-count {
+      font-size: 176px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: #22c55e;
+      font-variant-numeric: tabular-nums;
+    }
+    #po-sub {
+      margin-top: 18px;
+      font-size: 42px;
+      font-weight: 600;
+    }
+    #po-sub .w {
+      display: inline-block;
+      margin: 0 0.12em;
+    }
+    #po-sub .dot {
+      color: #8ba3bc;
+    }
+  </style>
+  <div id="root" data-composition-id="payoff" data-width="1920" data-height="1080">
+    <div id="po-stage" class="clip" data-start="0" data-duration="3.5" data-layout-allow-overflow>
+      <div id="po-inner">
+        <div class="po-row" id="po-ra">
+          <div class="po-lab">AKSİYON ALINMAZSA</div>
+          <div class="po-barline"><div class="po-bar" id="po-bar-a"></div><div class="po-num" id="po-num-a">2.741.018 ₺</div></div>
+        </div>
+        <div class="po-row" id="po-rb">
+          <div class="po-lab">NEXUS ÖNERİSİ</div>
+          <div class="po-barline"><div class="po-bar" id="po-bar-b"></div><div class="po-num" id="po-num-b">109.567 ₺</div></div>
+        </div>
+        <div id="po-hero">
+          <div id="po-hero-lab">TASARRUF</div>
+          <div id="po-count">2.631.451 ₺</div>
+          <div id="po-sub"><span class="w">0 gün duruş</span><span class="w dot">·</span><span class="w">maliyet 25 kat düşük</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      // 0.00 whip in from the right (the decision map left to the left).
+      tl.fromTo("#po-inner", { x: 420, filter: "blur(18px)" }, { x: 0, filter: "blur(0px)", duration: 0.28, ease: "expo.out" }, 0);
+
+      // Two outcomes as bars: waiting vs. the recommendation.
+      // the red bar is already moving on the impact frame
+      tl.fromTo("#po-bar-a", { scaleX: 0.08 }, { scaleX: 1, duration: 0.55, ease: "expo.out" }, 0);
+      tl.fromTo("#po-num-a", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18 }, 0.32);
+      tl.fromTo("#po-rb .po-lab", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 0.45);
+      tl.fromTo("#po-bar-b", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "expo.out" }, 0.55);
+      tl.fromTo("#po-num-b", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18 }, 0.62);
+
+      // 0.90 the difference counts up and lands on the beat (film 25.0).
+      tl.fromTo("#po-hero-lab", { opacity: 0, scale: 1.25, filter: "blur(8px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 0.88);
+      const c = { v: 0 };
+      const el = document.getElementById("po-count");
+      const fmt = (n) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " ₺";
+      tl.fromTo(c, { v: 0 }, { v: 2631451, duration: 1.05, ease: "power3.out", onUpdate: () => { el.textContent = fmt(c.v); } }, 0.95);
+      tl.fromTo("#po-count", { opacity: 0 }, { opacity: 1, duration: 0.12 }, 0.95);
+      tl.fromTo("#po-count", { scale: 1.07 }, { scale: 1, duration: 0.4, ease: "expo.out", immediateRender: false }, 2.0);
+      tl.fromTo("#po-count", { textShadow: "0 0 60px rgba(34,197,94,0.75)" }, { textShadow: "0 0 0px rgba(34,197,94,0)", duration: 0.6, ease: "power2.out", immediateRender: false }, 2.0);
+      tl.fromTo("#po-sub .w", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.15, stagger: 0.09 }, 1.95);
+
+      // 3.25 blur swap into the end card.
+      tl.to("#po-inner", { opacity: 0, filter: "blur(10px)", duration: 0.2, ease: "power2.in" }, 3.28);
+
+      window.__timelines["payoff"] = tl;
+    })();
+  </script>
+</template>

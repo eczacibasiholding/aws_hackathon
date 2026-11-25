@@ -1,0 +1,215 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 50% 45%, #0b1e31 0%, #06111d 65%);
+      font-family: "NX Sans", sans-serif;
+      color: #dce8f5;
+    }
+    #ag-stage {
+      position: absolute;
+      inset: 0;
+    }
+    #ag-cam {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: 0 0;
+    }
+    #ag-head {
+      position: absolute;
+      left: 120px;
+      top: 112px;
+      font-family: "NX Mono", monospace;
+      font-size: 28px;
+      color: #8ba3bc;
+      letter-spacing: 0.04em;
+    }
+    #ag-head b {
+      color: #4fb3e8;
+      font-weight: 700;
+    }
+    #ag-base {
+      position: absolute;
+      left: 240px;
+      top: 468px;
+      width: 1440px;
+      height: 4px;
+      background: #1c3954;
+    }
+    .ag-link {
+      position: absolute;
+      top: 467px;
+      height: 6px;
+      width: 360px;
+      background: #4fb3e8;
+      transform-origin: 0 50%;
+      box-shadow: 0 0 14px rgba(79, 179, 232, 0.6);
+    }
+    .ag-node {
+      position: absolute;
+      top: 404px;
+      width: 132px;
+      height: 132px;
+      margin-left: -66px;
+      border-radius: 50%;
+      border: 4px solid #1c3954;
+      background: #0a1828;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "NX Mono", monospace;
+      font-weight: 700;
+      font-size: 36px;
+      color: #8ba3bc;
+    }
+    .ag-name {
+      position: absolute;
+      top: 330px;
+      width: 340px;
+      margin-left: -170px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .ag-q {
+      position: absolute;
+      top: 556px;
+      width: 340px;
+      margin-left: -170px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 500;
+      color: #8ba3bc;
+    }
+    .ag-chip {
+      position: absolute;
+      top: 622px;
+      width: 342px;
+      margin-left: -171px;
+      padding: 18px 10px 20px;
+      text-align: center;
+      background: rgba(8, 20, 33, 0.93);
+      border: 2px solid #1c3954;
+      border-radius: 14px;
+    }
+    .ag-val {
+      font-size: 50px;
+      font-weight: 800;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+    .ag-desc {
+      font-size: 28px;
+      font-weight: 500;
+      color: #dce8f5;
+      margin-top: 4px;
+    }
+    .blue {
+      color: #4fb3e8;
+    }
+    .red {
+      color: #ef4444;
+    }
+    .amber {
+      color: #f59e0b;
+    }
+    .green {
+      color: #22c55e;
+    }
+    #ag-human {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 862px;
+      text-align: center;
+      font-size: 44px;
+      font-weight: 700;
+    }
+    #ag-human .w {
+      display: inline-block;
+      margin: 0 0.14em;
+    }
+  </style>
+  <div id="root" data-composition-id="agents" data-width="1920" data-height="1080">
+    <div id="ag-stage" class="clip" data-start="0" data-duration="7.5" data-layout-allow-overflow data-layout-allow-overlap>
+      <div id="ag-cam">
+        <div id="ag-head"><b>NEXUS</b> · Kızıldeniz gecikmesi · Klaritromisin API</div>
+        <div id="ag-base"></div>
+        <div class="ag-link" id="ag-k1" style="left: 240px"></div>
+        <div class="ag-link" id="ag-k2" style="left: 600px"></div>
+        <div class="ag-link" id="ag-k3" style="left: 960px"></div>
+        <div class="ag-link" id="ag-k4" style="left: 1320px"></div>
+
+        <div class="ag-name" id="ag-n1" style="left: 240px">SİNYAL</div>
+        <div class="ag-name" id="ag-n2" style="left: 600px">RİSK</div>
+        <div class="ag-name" id="ag-n3" style="left: 960px">ETKİ</div>
+        <div class="ag-name" id="ag-n4" style="left: 1320px">SEÇENEK</div>
+        <div class="ag-name" id="ag-n5" style="left: 1680px">KARAR</div>
+
+        <div class="ag-node" id="ag-o1" style="left: 240px">01</div>
+        <div class="ag-node" id="ag-o2" style="left: 600px">02</div>
+        <div class="ag-node" id="ag-o3" style="left: 960px">03</div>
+        <div class="ag-node" id="ag-o4" style="left: 1320px">04</div>
+        <div class="ag-node" id="ag-o5" style="left: 1680px">05</div>
+
+        <div class="ag-q" id="ag-q1" style="left: 240px">Ne oldu?</div>
+        <div class="ag-q" id="ag-q2" style="left: 600px">Ne kadar ciddi?</div>
+        <div class="ag-q" id="ag-q3" style="left: 960px">Maliyeti ne?</div>
+        <div class="ag-q" id="ag-q4" style="left: 1320px">Ne yapabiliriz?</div>
+        <div class="ag-q" id="ag-q5" style="left: 1680px">En iyisi hangisi?</div>
+
+        <div class="ag-chip" id="ag-c1" style="left: 240px"><div class="ag-val blue">8 dk</div><div class="ag-desc">içinde yakalandı</div></div>
+        <div class="ag-chip" id="ag-c2" style="left: 600px"><div class="ag-val red">22/25</div><div class="ag-desc">risk · YÜKSEK</div></div>
+        <div class="ag-chip" id="ag-c3" style="left: 960px"><div class="ag-val amber">424.550 ₺</div><div class="ag-desc">her duruş günü</div></div>
+        <div class="ag-chip" id="ag-c4" style="left: 1320px"><div class="ag-val blue">6 strateji</div><div class="ag-desc">gün gün simüle edildi</div></div>
+        <div class="ag-chip" id="ag-c5" style="left: 1680px"><div class="ag-val green">510 kg</div><div class="ag-desc">depo 260 + uçak 250</div></div>
+
+        <div id="ag-human"><span class="w">Son</span><span class="w">söz</span><span class="w">insanda:</span><span class="w green">Onayla</span><span class="w" style="color: #8ba3bc">·</span><span class="w red">Reddet</span><span class="w" style="color: #8ba3bc">·</span><span class="w amber">Değiştir</span></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      // 0.00 the dots that flew in from the reveal grow into the five agents.
+      tl.fromTo(".ag-node", { scale: 40 / 132, color: "rgba(139,163,188,0)" }, { scale: 1, color: "rgba(139,163,188,1)", duration: 0.45, ease: "expo.out", stagger: 0.03 }, 0);
+      tl.fromTo(".ag-node", { backgroundColor: "#4fb3e8" }, { backgroundColor: "#0a1828", duration: 0.3, ease: "power2.out" }, 0);
+      tl.fromTo(".ag-name", { opacity: 0, filter: "blur(6px)" }, { opacity: 0.38, filter: "blur(0px)", duration: 0.2, stagger: 0.04 }, 0.18);
+      tl.fromTo(".ag-q", { opacity: 0 }, { opacity: 0.38, duration: 0.2, stagger: 0.04 }, 0.24);
+      tl.fromTo("#ag-head", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0.2);
+      gsap.set(".ag-link", { scaleX: 0 });
+      gsap.set(".ag-chip", { opacity: 0 });
+
+      // One agent per beat (film 12.5, 13.5, 14.5, 15.5, 16.5); the link fills just before.
+      const act = [0.5, 1.5, 2.5, 3.5, 4.5];
+      const ring = ["#4fb3e8", "#4fb3e8", "#4fb3e8", "#4fb3e8", "#22c55e"];
+      act.forEach((a, i) => {
+        const n = i + 1;
+        if (i > 0) tl.fromTo("#ag-k" + i, { scaleX: 0 }, { scaleX: 1, duration: 0.38, ease: "power2.in" }, a - 0.4);
+        tl.fromTo("#ag-o" + n, { borderColor: "#1c3954", color: "#8ba3bc", boxShadow: "0 0 0px rgba(79,179,232,0)" }, { borderColor: ring[i], color: "#ffffff", boxShadow: "0 0 36px " + (i === 4 ? "rgba(34,197,94,0.55)" : "rgba(79,179,232,0.55)"), duration: 0.15, ease: "power2.out", immediateRender: false }, a);
+        tl.fromTo("#ag-o" + n, { scale: 0.9 }, { scale: 1, duration: 0.35, ease: "expo.out", immediateRender: false }, a);
+        tl.fromTo(["#ag-n" + n, "#ag-q" + n], { opacity: 0.38 }, { opacity: 1, duration: 0.15, immediateRender: false }, a);
+        tl.fromTo("#ag-c" + n, { opacity: 0, scale: 1.12, filter: "blur(8px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.28, ease: "expo.out" }, a + 0.06);
+      });
+
+      // 5.10 the human gate.
+      tl.fromTo("#ag-human .w", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power3.out", stagger: 0.07 }, 5.1);
+
+      // 6.55 camera tracks to KARAR, then dives through it (its fill becomes the next frame).
+      const s = 1.5;
+      tl.to("#ag-cam", { x: 960 - 1680 * s, y: 540 - 470 * s, scale: s, filter: "blur(3px)", duration: 0.45, ease: "power2.inOut" }, 6.55);
+      tl.to(["#ag-c5", "#ag-n5", "#ag-q5", "#ag-human"], { opacity: 0, duration: 0.15, ease: "power2.in" }, 6.85);
+      tl.to("#ag-o5", { color: "rgba(255,255,255,0)", borderColor: "#06111d", backgroundColor: "#06111d", boxShadow: "0 0 0px rgba(34,197,94,0)", duration: 0.15 }, 7.0);
+      tl.to("#ag-o5", { scale: 22, duration: 0.45, ease: "power3.in" }, 7.02);
+
+      window.__timelines["agents"] = tl;
+    })();
+  </script>
+</template>
