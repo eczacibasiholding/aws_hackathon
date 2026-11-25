@@ -1,0 +1,35 @@
+name: Deploy frontend to S3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - "scripts/deploy_frontend.sh"
+      - ".github/workflows/deploy-frontend.yml"
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # OIDC token for AWS (no stored access keys)
+  contents: read
+
+concurrency:
+  group: deploy-frontend
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+      BUCKET: nexus-ui-draft-242872169400
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::242872169400:role/nexus-github-frontend-deploy
+          aws-region: us-east-1
+
+      - name: Sync frontend/ to S3
+        run: bash scripts/deploy_frontend.sh

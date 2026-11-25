@@ -80,3 +80,24 @@ The system follows a multi-agent pipeline:
 ## Analysis Reference Date
 
 D0 = 25.11.2026
+
+## Frontend (tedarik zinciri haritası)
+
+`frontend/` statik bir sayfa: `tedarik-zinciri.html` (MapLibre GL + deck.gl). Backend bağlı değilken DEMO verisiyle çalışır.
+
+- Kütüphaneler ve harita verisi `frontend/vendor/` altında yerel olarak durur (maplibre-gl 5.24.0, deck.gl 9.3.5, topojson-client 3.1.0, world-atlas 2.0.2 `land-50m.json`). Etkinlik ağı unpkg.com'u engellediğinde sayfa boş kalıyordu; bu yüzden CDN kullanılmaz. `scripts/deploy_frontend.sh` HTML'de dış adresten script/stil bulursa deploy'u durdurur.
+- Yerelde açmak: `cd frontend && python3 -m http.server 8000` → http://localhost:8000/tedarik-zinciri.html
+
+### Barındırma (AWS)
+
+| | |
+|---|---|
+| Hesap | 242872169400 |
+| Bölge | us-east-1 |
+| Servis | S3 statik web sitesi, bucket `nexus-ui-draft-242872169400` |
+| URL | http://nexus-ui-draft-242872169400.s3-website-us-east-1.amazonaws.com |
+
+- İlk kurulum (bir kez, tekrar çalıştırılabilir): `./scripts/setup_frontend_infra.sh`
+- Elle deploy: `./scripts/deploy_frontend.sh`
+- Otomatik deploy: `main` dalına `frontend/**` değişikliği push edilince `.github/workflows/deploy-frontend.yml` çalışır. AWS'ye GitHub OIDC ile bağlanır (saklanan erişim anahtarı yok). Rol `nexus-github-frontend-deploy` yalnızca bu reponun `main` dalına güvenir ve yalnızca bu bucket'a yazabilir.
+- Not: bucket herkese açık okunur ve HTTP'dir (demo için). HTTPS gerekirse önüne CloudFront konur.
