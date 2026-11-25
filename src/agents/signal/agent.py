@@ -53,7 +53,7 @@ def run(data, sinyal_no: str, run_id: str) -> SignalOutput:
     row = _satir(data, sinyal_no)
     metin = str(row.get(METIN) or "")
     c, uyarilar = cikar(data, row)
-    sev, mlz, taraf, yol = m.eslestir(data, c)
+    sev, mlz, taraf, yol = m.eslestir(data, c, metin)
     dogr: list[Uyari] = []
     if not sev and (c.takip_no_ipuclari or c.po_ipuclari or c.gemi_adlari):
         dogr.append(Uyari(kod="ESLESME_YOK", mesaj="Metindeki ipuçları hiçbir sevkiyatla eşleşmedi",

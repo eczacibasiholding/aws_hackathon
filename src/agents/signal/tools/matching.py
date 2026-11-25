@@ -15,8 +15,9 @@ def _n(s) -> str:
     return re.sub(r"\s+", " ", str(s or "")).strip().lower()
 
 
-def eslestir(data, c: SignalLLMCikarimi) -> tuple[list[str], list[str], list[str], list[str]]:
-    """→ (sevkiyatlar, malzemeler, taraflar, eşleşme yolu parçaları). Sırayla Takip No, PO, gemi adı."""
+def eslestir(data, c: SignalLLMCikarimi, metin: str = "") -> tuple[list[str], list[str], list[str], list[str]]:
+    """→ (sevkiyatlar, malzemeler, taraflar, eşleşme yolu parçaları). Sırayla Takip No, PO, gemi adı,
+    son olarak metinde birebir geçen Sevkiyat No (ör. "SV-26-1240")."""
     sv_rows = data.rows("Sevkiyatlar")
     sev, yol, taraf = [], [], []
 
@@ -39,6 +40,12 @@ def eslestir(data, c: SignalLLMCikarimi) -> tuple[list[str], list[str], list[str
         for r in sv_rows:
             if _n(g) and _n(g) in _n(r.get("Son Konum / Not")):
                 ekle(r, f"Gemi {g} → Son Konum / Not", "Taşıyıcı No")
+    if not sev:
+        import re
+        adaylar = set(re.findall(r"SV-\d{2}-\d{4}", " ".join([metin, *c.takip_no_ipuclari, *c.po_ipuclari])))
+        for r in sv_rows:
+            if r["Sevkiyat No"] in adaylar:
+                ekle(r, f"Sevkiyat No {r['Sevkiyat No']} metinde", "Tedarikçi No")
     mlz = []
     for s in sev:
         for r in sv_rows:

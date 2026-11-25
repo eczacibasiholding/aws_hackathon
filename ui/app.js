@@ -79,7 +79,7 @@
   function ekran2() {
     let i = durum.detay && durum.detay.impact;
     if (Array.isArray(i)) i = i.slice().sort((a, b) => (b.aksiyonsuz_maliyet_try || 0) - (a.aksiyonsuz_maliyet_try || 0))[0];  // malzeme başına liste → en yüksek etkili
-    if (!i) { $("#etkiKutular").innerHTML = '<p class="soluk">Bu run için etki çıktısı yok.</p>'; $("#zaman").innerHTML = ""; $("#siparisTablo tbody").innerHTML = ""; $("#etkiDetay").innerHTML = ""; return; }
+    if (!i) { $("#etkiBaslik").textContent = ""; $("#etkiKutular").innerHTML = '<p class="soluk">Bu run için etki çıktısı yok.</p>'; $("#zaman").innerHTML = ""; $("#siparisTablo tbody").innerHTML = ""; $("#etkiDetay").innerHTML = ""; return; }
     $("#etkiBaslik").textContent = `${i.sevkiyat_no} · ${i.malzeme_no} · ${i.tesis_kodu} / ${i.hat_kodu}`;
     $("#etkiKutular").innerHTML = [
       ["Stok bitişi", tarihSaat(i.tukenme_tarihi), `${gun(i.stok_kapsama_gun)} kapsama`],
